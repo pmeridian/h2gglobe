@@ -321,10 +321,8 @@ int main(int argc, char* argv[]){
   toysModel.setSignalModifierConstant(true);
   toysModel.fitToData(dataBinned,false,true,true);
   if (!skipPlots) 
-    {
-      std::cout << "HELLO" << std::endl; 
       toysModel.plotPdfsToData(dataBinned,80,Form("%s/plots/truthToData/datafit_mu%3.1f",outDir.c_str(),expectSignal),false);
-    }
+
   toysModel.setSignalModifierConstant(false);
   toysModel.saveWorkspace(outFile);
   
@@ -357,7 +355,14 @@ int main(int argc, char* argv[]){
 
       testModel.setSignalModifierVal(expectSignal);
       testModel.setSignalModifierConstant(false);
+      if (!skipPlots)
+	{
+	  testModel.fitToData(it->second,false,false,false,false);
+	  testModel.plotPdfsToData(it->second,80,Form("%s/plots/toys/fit_%s",outDir.c_str(),it->first.c_str()),false);
+	}
       testModel.fitToData(it->second,false,true,true,true);
+      
+
       //      testModel.wsCache->Print("v");
 
       // -----  SAVE RESULTS IN THE TREE ----- 

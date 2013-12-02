@@ -50,7 +50,7 @@ public :
    // Declaration of leaf types
    Int_t           mass;
    Float_t         mu;
-   Float_t         cat;
+   UInt_t          cat;
    Float_t         muTruth;
    Float_t         sigma_mu;
    Float_t         bkgTrue1fwhm;

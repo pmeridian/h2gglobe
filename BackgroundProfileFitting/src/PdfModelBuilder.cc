@@ -98,7 +98,7 @@ RooAbsPdf* PdfModelBuilder::getBernstein(string prefix, int order){
   for (int i=0; i<order; i++){
     string name = Form("%s_p%d",prefix.c_str(),i);
     //params.insert(pair<string,RooRealVar*>(name, new RooRealVar(name.c_str(),name.c_str(),1.0,0.,5.)));
-    RooRealVar *param = new RooRealVar(name.c_str(),name.c_str(),0.01*(i+1),-5.,5.);
+    RooRealVar *param = new RooRealVar(name.c_str(),name.c_str(),0.01*(i+1),0.,10.);
     RooFormulaVar *form = new RooFormulaVar(Form("%s_sq",name.c_str()),Form("%s_sq",name.c_str()),"@0*@0",RooArgList(*param));
     params.insert(pair<string,RooRealVar*>(name,param));
     prods.insert(pair<string,RooFormulaVar*>(name,form));
@@ -244,7 +244,7 @@ RooAbsPdf* PdfModelBuilder::getPowerLawSingle(string prefix, int order){
     for (int i=1; i<=npows; i++){
       string name =  Form("%s_p%d",prefix.c_str(),i);
       string ename =  Form("%s_e%d",prefix.c_str(),i);
-      params.insert(pair<string,RooRealVar*>(name, new RooRealVar(name.c_str(),name.c_str(),TMath::Max(-20.,-1.*(i+1)),-20.,4.)));
+      params.insert(pair<string,RooRealVar*>(name, new RooRealVar(name.c_str(),name.c_str(),TMath::Max(-20.,-1.*(i+1)),-20.,0.)));
       utilities.insert(pair<string,RooAbsPdf*>(ename, new RooPower(ename.c_str(),ename.c_str(),*obs_var,*params[name])));
       pows->add(*utilities[ename]);
     }
@@ -351,7 +351,7 @@ RooAbsPdf* PdfModelBuilder::getExponentialSingle(string prefix, int order){
     for (int i=1; i<=nexps; i++){
       string name =  Form("%s_p%d",prefix.c_str(),i);
       string ename =  Form("%s_e%d",prefix.c_str(),i);
-      params.insert(pair<string,RooRealVar*>(name, new RooRealVar(name.c_str(),name.c_str(),TMath::Max(-2.,-0.04*(i+1)),-2.,1.5)));
+      params.insert(pair<string,RooRealVar*>(name, new RooRealVar(name.c_str(),name.c_str(),TMath::Max(-2.,-0.04*(i+1)),-2.,0.)));
       utilities.insert(pair<string,RooAbsPdf*>(ename, new RooExponential(ename.c_str(),ename.c_str(),*obs_var,*params[name])));
       exps->add(*utilities[ename]);
     }
@@ -481,7 +481,7 @@ void PdfModelBuilder::plotPdfsToData(RooAbsData *data, int binning, string name,
     data->plotOn(plot,Binning(binning));
     if (specificPdfName!="NONE") it->second->plotOn(plot);
     plot->Draw();
-    canv->Print(Form("%s_%s.pdf",name.c_str(),it->first.c_str()));
+    canv->Print(Form("%s_%s.png",name.c_str(),it->first.c_str()));
   }
   delete canv;
 }
@@ -694,7 +694,7 @@ void PdfModelBuilder::plotHybridToy(string prefix, int binning, vector<float> sw
     hybrid->second->plotOn(plot,Binning(binning),MarkerSize(0.8),MarkerStyle(kFullSquare));
     plot->SetMinimum(0.0001);
     plot->Draw();
-    canv->Print(Form("%s_%s.pdf",prefix.c_str(),hybrid->first.c_str()));
+    canv->Print(Form("%s_%s.png",prefix.c_str(),hybrid->first.c_str()));
   }
   delete canv;
 }
@@ -717,7 +717,7 @@ void PdfModelBuilder::plotToysWithPdfs(string prefix, int binning, bool bkgOnly)
         toyIt->second->plotOn(plot,Binning(binning));
         pdfIt->second->plotOn(plot,LineColor(kRed));
         plot->Draw();
-        canv->Print(Form("%s_%s.pdf",prefix.c_str(),pdfIt->first.c_str()));
+        canv->Print(Form("%s_%s.png",prefix.c_str(),pdfIt->first.c_str()));
       }
     }
   }
