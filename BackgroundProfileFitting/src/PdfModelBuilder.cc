@@ -486,13 +486,15 @@ void PdfModelBuilder::plotPdfsToData(RooAbsData *data, int binning, string name,
   delete canv;
 }
 
-void PdfModelBuilder::fitToData(RooAbsData *data, bool bkgOnly, bool cache, bool print){
+void PdfModelBuilder::fitToData(RooAbsData *data, bool bkgOnly, bool cache, bool print, bool resetAfterFit){
   
   map<string,RooAbsPdf*> pdfSet;
   if (bkgOnly) pdfSet = bkgPdfs;
   else pdfSet = sbPdfs;
 
+  float initVal=signalModifier->getVal();
   for (map<string,RooAbsPdf*>::iterator it=pdfSet.begin(); it!=pdfSet.end(); it++){
+    signalModifier->setVal(initVal);
     RooFitResult *fit = (RooFitResult*)it->second->fitTo(*data,Save(true));
     if (print){
       cout << "Fit Res Before: " << endl;
@@ -500,16 +502,32 @@ void PdfModelBuilder::fitToData(RooAbsData *data, bool bkgOnly, bool cache, bool
       cout << "Fit Res After: " << endl;
       fit->floatParsFinal().Print("v");
     }
+    
     if (cache) {
       RooArgSet *fitargs = (RooArgSet*)it->second->getParameters(*obs_var);
-      wsCache->defineSet(Form("%s_params",it->first.c_str()),*fitargs);
-      wsCache->defineSet(Form("%s_observs",it->first.c_str()),*obs_var);
+      wsCache->defineSet(Form("%s_params",it->first.c_str()),*fitargs, kTRUE);
+      wsCache->defineSet(Form("%s_observs",it->first.c_str()),*obs_var, kTRUE);
       wsCache->saveSnapshot(it->first.c_str(),*fitargs,true);
       if (print) {
         cout << "Cached values: " << endl;
         fitargs->Print("v");
       }
     }
+    if (resetAfterFit)
+      {
+	RooArgSet *fitargs = (RooArgSet*)it->second->getParameters(*obs_var);
+	RooLinkedListIter it = fitargs->iterator();
+	RooRealVar *myarg; 
+	while ((myarg = (RooRealVar *)it.Next()))
+	  { 
+	    RooRealVar* initVar= (RooRealVar*) fit->floatParsInit().find(myarg->GetName());
+	    if (!initVar)
+	      continue;
+	    myarg->setVal( initVar->getVal() );
+	  }
+        cout << "Reset fit values: " << endl;
+	fitargs->Print("v");
+      }
   }
   if (bkgOnly) bkgHasFit=true;
   else sbHasFit=true;
