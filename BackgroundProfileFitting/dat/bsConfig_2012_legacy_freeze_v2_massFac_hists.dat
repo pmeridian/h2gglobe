@@ -65,10 +65,11 @@
 
 cat=12 
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-4:4) 
-input=dat/biasStudy_legacy_freeze_v2_massFac_cat12_mu_0.0.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_b/biasStudy_legacy_freeze_v2_massFac_cat12_mu0.0_histos.root
-#
-#
+input=legacy_freeze_v2_massFac_c_trees/cat12_mu1.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_c/biasStudy_legacy_freeze_v2_massFac_cat12_mu1.0_histos.root
+
+
+
 #cat=13 
 #plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-4:4) 
 #input=dat/biasStudy_legacy_freeze_v2_massFac_cat13_mu_0.0.txt
