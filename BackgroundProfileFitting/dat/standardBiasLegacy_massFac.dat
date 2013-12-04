@@ -4,7 +4,7 @@ bkgfilename=root://eoscms///eos/cms/store/group/phys_higgs/cmshgg/analyzed/works
 sigwsname=cms_hgg_workspace
 bkgwsname=cms_hgg_workspace
 datfile=dat/bsConfig_2012_legacy_freeze_v2_massFac.dat
-outerDir=legacy_freeze_v2_massFac_c
+outerDir=legacy_freeze_v2_massFac_d
 eosPath=/store/group/phys_higgs/meridian/BiasStudy/
 cat=0 mu=0.0  mlow=-10.  mhigh=10. mass=110
 cat=0 mu=0.0  mlow=-10.  mhigh=10. mass=120

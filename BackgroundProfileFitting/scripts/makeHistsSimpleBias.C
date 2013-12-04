@@ -79,8 +79,16 @@ void makeHistsSimpleBias::Loop()
      if (ientry < 0) break;
       nb = fChain->GetEntry(jentry);   nbytes += nb;
       //Check quality of the fit
-      if (sigma_mu<=0)
+      if (sigma_mu<=0.1)
 	continue;
+      if (fabs(fabs(mu)-10)<=0.1)
+	continue;
+
+//       if (sigma_mu>10)
+// 	continue;
+//       if (TMath::Abs(mu-muTruth)>8)
+// 	continue;
+
       TString evtType=Form("cat%d_truth_%s_test_%s_muInj_%2.1f_mass_%d",int(mycat),genFun,fitFun,muTruth,mass);
       for (histo_map::const_iterator it=histos.begin();it!=histos.end();++it)
 	{

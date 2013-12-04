@@ -314,18 +314,19 @@ int main(int argc, char* argv[]){
   // throw toys - only need to fit data once as result will be cached
   cout << "------ FITTING TRUTH TO DATA ------" << endl;
   // sometimes useful to do best fit first to get reasonable starting value
-  toysModel.setSignalModifierConstant(false);
-  toysModel.fitToData(dataBinned,false,false,true);
-  // -----
-  toysModel.setSignalModifierVal(expectSignal);
+  toysModel.setSignalModifierVal(0);
   toysModel.setSignalModifierConstant(true);
+  toysModel.fitToData(dataBinned,false,false,false);
+  // -----
+  //  toysModel.setSignalModifierVal(expectSignal);
+  //  toysModel.setSignalModifierConstant(true);
   toysModel.fitToData(dataBinned,false,true,true);
+  //  toysModel.setSignalModifierVal(expectSignal);
+  //  toysModel.setSignalModifierConstant(false);
+  toysModel.saveWorkspace(outFile);
   if (!skipPlots) 
       toysModel.plotPdfsToData(dataBinned,80,Form("%s/plots/truthToData/datafit_mu%3.1f",outDir.c_str(),expectSignal),false);
 
-  toysModel.setSignalModifierConstant(false);
-  toysModel.saveWorkspace(outFile);
-  
   iCat_=cat;
 
   for (int toy=jobn*ntoys; toy<(jobn+1)*ntoys; toy++){
@@ -336,17 +337,18 @@ int main(int argc, char* argv[]){
     iToy_=toy;
     // throw toy
     map<string,RooAbsData*> toys; 
-    if (throwHybridToys) {
-      toysModel.throwHybridToy(Form("truth_job%d_toy%d",jobn,toy),dataBinned->sumEntries(),switchMass,switchFunc,false,true,true,true);
-      toys = toysModel.getHybridToyData();
-      if (!skipPlots) toysModel.plotToysWithPdfs(Form("%s/plots/toys/job%d_toy%d",outDir.c_str(),jobn,toy),80,false);
-      if (!skipPlots) toysModel.plotHybridToy(Form("%s/plots/toys/job%d_toy%d",outDir.c_str(),jobn,toy),80,switchMass,switchFunc,false);
-    }
-    else {
-      toysModel.throwToy(Form("truth_job%d_toy%d",jobn,toy),dataBinned->sumEntries(),false,true,true,true);
-      toys = toysModel.getToyData();
-      if (!skipPlots) toysModel.plotToysWithPdfs(Form("%s/plots/toys/job%d_toy%d",outDir.c_str(),jobn,toy),80,false);
-    }
+    //     if (throwHybridToys) {
+    //       toysModel.throwHybridToy(Form("truth_job%d_toy%d",jobn,toy),dataBinned->sumEntries(),switchMass,switchFunc,false,true,true,true);
+    //       toys = toysModel.getHybridToyData();
+    //       if (!skipPlots) toysModel.plotToysWithPdfs(Form("%s/plots/toys/job%d_toy%d",outDir.c_str(),jobn,toy),80,false);
+    //       if (!skipPlots) toysModel.plotHybridToy(Form("%s/plots/toys/job%d_toy%d",outDir.c_str(),jobn,toy),80,switchMass,switchFunc,false);
+    //     }
+    //     else {
+    toysModel.throwToy(Form("truth_job%d_toy%d",jobn,toy),dataBinned->sumEntries(),false,true,true,true,true,expectSignal);
+    toys = toysModel.getToyData();
+    if (!skipPlots) 
+      toysModel.plotToysWithPdfs(Form("%s/plots/toys/job%d_toy%d",outDir.c_str(),jobn,toy),80,false);
+    //     }
     for (map<string,RooAbsData*>::iterator it=toys.begin(); it!=toys.end(); it++){
        // ----- USEFUL DEBUG -----------
        //  --- this can be a useful check that the truth model values are being cached properly ---
@@ -355,13 +357,9 @@ int main(int argc, char* argv[]){
 
       testModel.setSignalModifierVal(expectSignal);
       testModel.setSignalModifierConstant(false);
-      if (!skipPlots)
-	{
-	  testModel.fitToData(it->second,false,false,false,false);
-	  testModel.plotPdfsToData(it->second,80,Form("%s/plots/toys/fit_%s",outDir.c_str(),it->first.c_str()),false);
-	}
       testModel.fitToData(it->second,false,true,true,true);
-      
+      if (!skipPlots)
+	testModel.plotPdfsToData(it->second,80,Form("%s/plots/toys/fit_%s",outDir.c_str(),it->first.c_str()),false,"",true);
 
       //      testModel.wsCache->Print("v");
 

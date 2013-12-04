@@ -41,12 +41,12 @@ class PdfModelBuilder {
     RooAbsPdf *getSigPdf();
 
     void fitToData(RooAbsData *data, bool bkgOnly=true, bool cache=true, bool print=false, bool resetAfterFit=false);
-    void plotPdfsToData(RooAbsData *data, int binning, string name, bool bkgOnly=true, string specificPdfName="");
+    void plotPdfsToData(RooAbsData *data, int binning, string name, bool bkgOnly=true, string specificPdfName="", bool getValuesFromCache=false);
     void plotToysWithPdfs(string prefix, int binning, bool bkgOnly=true);
     void plotHybridToy(string prefix, int binning, vector<float> switchOverMasses, vector<string> functions, bool bkgOnly=true);
     
     void setSeed(int seed);
-    void throwToy(string name, int nEvents, bool bkgOnly=true, bool binned=true, bool poisson=true, bool cache=true);
+    void throwToy(string name, int nEvents, bool bkgOnly=true, bool binned=true, bool poisson=true, bool cache=true, bool overrideCachedMu=false, float expectSignal=0.0);
     RooDataSet *makeHybridDataset(vector<float> switchOverMasses, vector<RooDataSet*> dataForHybrid);
     void throwHybridToy(string name, int nEvents, vector<float> switchOverMasses, vector<string> functions, bool bkgOnly=true, bool binned=true, bool poisson=true, bool cache=true);
     map<string,RooAbsData*> getToyData();

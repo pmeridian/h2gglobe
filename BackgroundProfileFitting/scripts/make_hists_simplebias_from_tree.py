@@ -14,9 +14,11 @@ import ROOT as r
 
 r.gSystem.Load('lib/libBackgroundProfileFitting.so')
 r.gROOT.ProcessLine('.L scripts/makeHistsSimpleBias.C+g')
+r.gROOT.SetBatch(1)
+
 from ROOT import makeHistsSimpleBias
 
-def makeHists(cat=0,options=dict()):
+def makeHists(cat=(0,0),options=dict()):
     chain=r.TChain("muTree")
     input = open(options['input'])
     for line in input.readlines():
@@ -28,7 +30,7 @@ def makeHists(cat=0,options=dict()):
             chain.Add(line.strip())
     histDraw=makeHistsSimpleBias(chain)
     histDraw.outFile=options['outfile']
-    histDraw.mycat=int(cat)
+    histDraw.mycat=int(cat[0])
     for val in options['plot'].split(','):
         infos=val.split('(')
         histDraw.plot_vec.push_back(infos[0])
@@ -51,10 +53,11 @@ else:
     info = line.strip().split('=')
     if (info[0]=='cat'):
       myOptions={}
-      configDict[info[1]]=myOptions
+      (cat,mu)=info[1].strip('(').strip(')').split(',')
+      configDict[(cat,mu)]=myOptions
     else:
       myOptions[info[0]]=info[1]
-  print configDict
+#  print configDict
   sw.Reset()
   sw.Start()
   for cat in configDict.keys():

@@ -110,9 +110,10 @@ def drawHists():
           text=r.TLatex()
           text.SetTextAlign(12)
           text.SetTextSize(0.04)
-          text.DrawTextNDC(0.73,0.86,options.additionalText)
-          text.DrawTextNDC(0.73,0.82,str(cat))
-          text.DrawTextNDC(0.73,0.78,'truth '+str(truth))
+          if (not options.additionalText == ""):
+            text.DrawTextNDC(0.71,0.86,options.additionalText)
+          text.DrawTextNDC(0.71,0.82,str(cat)+' muInj '+str(mu))
+          text.DrawTextNDC(0.71,0.78,'truth '+str(truth))
           leg=r.TLegend(0.12,0.68,0.4,0.88)
           leg.SetBorderSize(0)
           leg.SetFillColor(0)
@@ -120,10 +121,26 @@ def drawHists():
             box=r.TBox(110,-0.15,150,0.15)
             box.SetFillColor(r.kGray)
             box.SetFillStyle(3001)
-            box.SetLineColor(r.kGray+2)
-            box.SetLineStyle(2)
+            box.SetLineColor(r.kBlack)
+            box.SetLineStyle(3)
             box.SetLineWidth(2)
             box.Draw()
+            line=r.TLine(110,0,150,0)
+            line.SetLineColor(r.kBlack)
+            line.SetLineStyle(2)
+            line.SetLineWidth(1)
+            line.Draw()
+            line1=r.TLine(110,0.15,150,0.15)
+            line1.SetLineColor(r.kBlack)
+            line1.SetLineStyle(2)
+            line1.SetLineWidth(1)
+            line1.Draw()
+            line2=r.TLine(110,-0.15,150,-0.15)
+            line2.SetLineColor(r.kBlack)
+            line2.SetLineStyle(2)
+            line2.SetLineWidth(1)
+            line2.Draw()
+
           for test in test_mods:
             graphs[(cat,truth,test,plt)]['median'].SetMarkerStyle(20)
             graphs[(cat,truth,test,plt)]['median'].SetMarkerSize(0.9)
@@ -131,11 +148,17 @@ def drawHists():
             graphs[(cat,truth,test,plt)]['median'].SetLineColor(colorMap[test])
             graphs[(cat,truth,test,plt)]['median'].SetLineWidth(2)
             graphs[(cat,truth,test,plt)]['median'].Draw("SAMEPL")
-          leg.AddEntry(graphs[(cat,truth,test,plt)]['median'],str(test),'pl')
+            maxV=r.TMath.MaxElement(graphs[(cat,truth,test,plt)]['median'].GetN(),graphs[(cat,truth,test,plt)]['median'].GetY())
+            minV=r.TMath.MinElement(graphs[(cat,truth,test,plt)]['median'].GetN(),graphs[(cat,truth,test,plt)]['median'].GetY())
+            maxAbsV=max(r.TMath.Abs(maxV),r.TMath.Abs(minV))
+            if (plt=="pull"):
+              leg.AddEntry(graphs[(cat,truth,test,plt)]['median'],str(test)+": maxBias(%3.2f)"%(maxAbsV),'pl')
+            else:
+              leg.AddEntry(graphs[(cat,truth,test,plt)]['median'],str(test),'pl')
           leg.Draw()
           axis.Draw('AXISSAME')
           for format in [".png",".pdf"]:
-            c.SaveAs("%s/cat%d_truth_%s_muInj_%s_%s_median%s"%(options.outdir,int(cat.lstrip('cat')),truth,srt(mu),plt,format))
+            c.SaveAs("%s/cat%d_truth_%s_muInj_%s_%s_median%s"%(options.outdir,int(cat.lstrip('cat')),truth,str(mu),plt,format))
           
 
 def drawGraph(cat=0,truth="exp1",test="exp1",mu="0.0",plot="pull",masses=[110,120,130,140,150]):
@@ -156,15 +179,15 @@ def drawGraph(cat=0,truth="exp1",test="exp1",mu="0.0",plot="pull",masses=[110,12
 
   graphDict['median'].SetName("cat%d_truth_%s_test_%s_muInj_%s_median"%(int(cat.lstrip('cat')),truth,str(mu),test))
   graphDict['mean'].SetName("cat%d_truth_%s_test_%s_muInj_%s_mean"%(int(cat.lstrip('cat')),truth,str(mu),test))
-  graphDict['rmsband'].SetName("cat%d_truth_%s_test_%s_muInj_%s_rmsband"%(int(cat.lstrip('cat')),truth,str(mu).test))
+  graphDict['rmsband'].SetName("cat%d_truth_%s_test_%s_muInj_%s_rmsband"%(int(cat.lstrip('cat')),truth,str(mu),test))
   graphDict['band68'].SetName("cat%d_truth_%s_test_%s_muInj_%s_band68"%(int(cat.lstrip('cat')),truth,str(mu),test))
   graphDict['band95'].SetName("cat%d_truth_%s_test_%s_muInj_%s_band95"%(int(cat.lstrip('cat')),truth,str(mu),test))
 
   i=0
   print "+++++++ PLOT_TYPE "+str(plot)
   for mass in masses:
-    h=file.Get("cat%d_truth_%s_test_%s_muInj_%s_mass_%d_%s"%(int(cat.lstrip('cat')),truth,test,int(mass),str(mu),plotType))
-    print h.GetName()
+    h=file.Get("cat%d_truth_%s_test_%s_muInj_%s_mass_%d_%s"%(int(cat.lstrip('cat')),truth,test,str(mu),int(mass),plotType))
+    print str(h.GetName())+"\t"+str(h.GetMean())+"\t"+str(h.GetRMS())
     h.GetXaxis().SetRangeUser(ranges[plot][0],ranges[plot][1])
     quantiles=array('d',[0,0,0,0,0])
     probs=array('d',[0.025,(1.-0.683)/2.,0.5,1-(1.-0.683)/2.,0.975])

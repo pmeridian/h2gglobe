@@ -42,6 +42,7 @@ PdfModelBuilder::PdfModelBuilder():
 {
   
   recognisedPdfTypes.push_back("Bernstein");
+  //  recognisedPdfTypes.push_back("Chebychev");
   recognisedPdfTypes.push_back("Exponential");
   recognisedPdfTypes.push_back("PowerLaw");
   recognisedPdfTypes.push_back("Laurent");
@@ -78,14 +79,14 @@ RooAbsPdf* PdfModelBuilder::getChebychev(string prefix, int order){
   for (int i=0; i<order; i++){
     string name = Form("%s_p%d",prefix.c_str(),i);
     //params.insert(pair<string,RooRealVar*>(name, new RooRealVar(name.c_str(),name.c_str(),1.0,0.,5.)));
-    RooRealVar *param = new RooRealVar(name.c_str(),name.c_str(),0.01,-10.,10.);
+    RooRealVar *param = new RooRealVar(name.c_str(),name.c_str(),-0.05*(i+1),-1.,1.);
     //RooFormulaVar *form = new RooFormulaVar(Form("%s_sq",name.c_str()),Form("%s_sq",name.c_str()),"@0*@0",RooArgList(*param));
     params.insert(pair<string,RooRealVar*>(name,param));
     //prods.insert(pair<string,RooFormulaVar*>(name,form));
     coeffList->add(*params[name]);
   }
-  //RooChebychev *cheb = new RooChebychev(prefix.c_str(),prefix.c_str(),*obs_var,*coeffList);
-  RooPolynomial *cheb = new RooPolynomial(prefix.c_str(),prefix.c_str(),*obs_var,*coeffList);
+  RooChebychev *cheb = new RooChebychev(prefix.c_str(),prefix.c_str(),*obs_var,*coeffList);
+  //  RooPolynomial *cheb = new RooPolynomial(prefix.c_str(),prefix.c_str(),*obs_var,*coeffList);
   return cheb;
   //bkgPdfs.insert(pair<string,RooAbsPdf*>(bern->GetName(),bern));
 
@@ -98,7 +99,7 @@ RooAbsPdf* PdfModelBuilder::getBernstein(string prefix, int order){
   for (int i=0; i<order; i++){
     string name = Form("%s_p%d",prefix.c_str(),i);
     //params.insert(pair<string,RooRealVar*>(name, new RooRealVar(name.c_str(),name.c_str(),1.0,0.,5.)));
-    RooRealVar *param = new RooRealVar(name.c_str(),name.c_str(),0.01*(i+1),0.,10.);
+    RooRealVar *param = new RooRealVar(name.c_str(),name.c_str(),0.01*(i+1),-10.,10.);
     RooFormulaVar *form = new RooFormulaVar(Form("%s_sq",name.c_str()),Form("%s_sq",name.c_str()),"@0*@0",RooArgList(*param));
     params.insert(pair<string,RooRealVar*>(name,param));
     prods.insert(pair<string,RooFormulaVar*>(name,form));
@@ -191,7 +192,7 @@ RooAbsPdf* PdfModelBuilder::getPowerLaw(string prefix, int order){
     if (order>0){
       start=-0.001/double(i);
       low=-0.01;
-      high=0.01;
+      high=0.0;
     }
     RooRealVar *var = new RooRealVar(Form("%s_p%d",prefix.c_str(),i),Form("%s_p%d",prefix.c_str(),i),start,low,high);
     coefList.add(*var);
@@ -212,7 +213,7 @@ RooAbsPdf* PdfModelBuilder::getExponential(string prefix, int order){
     if (order>0){
       start=-0.001/double(i);
       low=-0.01;
-      high=0.01;
+      high=0.0;
     }
     RooRealVar *var = new RooRealVar(Form("%s_p%d",prefix.c_str(),i),Form("%s_p%d",prefix.c_str(),i),start,low,high);
     coefList.add(*var);
@@ -244,7 +245,7 @@ RooAbsPdf* PdfModelBuilder::getPowerLawSingle(string prefix, int order){
     for (int i=1; i<=npows; i++){
       string name =  Form("%s_p%d",prefix.c_str(),i);
       string ename =  Form("%s_e%d",prefix.c_str(),i);
-      params.insert(pair<string,RooRealVar*>(name, new RooRealVar(name.c_str(),name.c_str(),TMath::Max(-20.,-1.*(i+1)),-10.,10.)));
+      params.insert(pair<string,RooRealVar*>(name, new RooRealVar(name.c_str(),name.c_str(),TMath::Max(-10.,-1.*(i+1)),-10.,0.)));
       utilities.insert(pair<string,RooAbsPdf*>(ename, new RooPower(ename.c_str(),ename.c_str(),*obs_var,*params[name])));
       pows->add(*utilities[ename]);
     }
@@ -351,7 +352,7 @@ RooAbsPdf* PdfModelBuilder::getExponentialSingle(string prefix, int order){
     for (int i=1; i<=nexps; i++){
       string name =  Form("%s_p%d",prefix.c_str(),i);
       string ename =  Form("%s_e%d",prefix.c_str(),i);
-      params.insert(pair<string,RooRealVar*>(name, new RooRealVar(name.c_str(),name.c_str(),TMath::Max(-2.,-0.04*(i+1)),-2.,1.)));
+      params.insert(pair<string,RooRealVar*>(name, new RooRealVar(name.c_str(),name.c_str(),TMath::Max(-2.,-0.04*(i+1)),-2.,0.)));
       utilities.insert(pair<string,RooAbsPdf*>(ename, new RooExponential(ename.c_str(),ename.c_str(),*obs_var,*params[name])));
       exps->add(*utilities[ename]);
     }
@@ -383,6 +384,7 @@ void PdfModelBuilder::addBkgPdf(string type, int nParams, string name, bool cach
   }
   RooAbsPdf *pdf;
   if (type=="Bernstein") pdf = getBernstein(name,nParams);
+  //  if (type=="Chebychev") pdf = getChebychev(name,nParams);
   if (type=="Exponential") pdf = getExponentialSingle(name,nParams);
   if (type=="PowerLaw") pdf = getPowerLawSingle(name,nParams);
   if (type=="Laurent") pdf = getLaurentSeries(name,nParams);
@@ -465,7 +467,7 @@ RooAbsPdf* PdfModelBuilder::getSigPdf(){
   return sigPdf;
 }
 
-void PdfModelBuilder::plotPdfsToData(RooAbsData *data, int binning, string name, bool bkgOnly,string specificPdfName){
+void PdfModelBuilder::plotPdfsToData(RooAbsData *data, int binning, string name, bool bkgOnly, string specificPdfName, bool getValuesFromCache){
   
   TCanvas *canv = new TCanvas();
   bool specPdf=false;
@@ -479,7 +481,26 @@ void PdfModelBuilder::plotPdfsToData(RooAbsData *data, int binning, string name,
     if (specPdf && it->first!=specificPdfName && specificPdfName!="NONE") continue;
     RooPlot *plot = obs_var->frame();
     data->plotOn(plot,Binning(binning));
-    if (specificPdfName!="NONE") it->second->plotOn(plot);
+    if (specificPdfName!="NONE") 
+      {
+	if (getValuesFromCache)
+	  {
+	    RooArgSet *fitargs = (RooArgSet*)it->second->getParameters(*obs_var);
+	    if (!wsCache->loadSnapshot(it->first.c_str()))
+		continue;
+	    
+	    RooLinkedListIter it = fitargs->iterator();
+	    RooRealVar *myarg; 
+	    while ((myarg = (RooRealVar *)it.Next()))
+	      { 
+		RooRealVar* initVar= (RooRealVar*) wsCache->var(myarg->GetName());
+		if (!initVar)
+		  continue;
+		myarg->setVal( initVar->getVal() );
+	      } 
+	  }
+	it->second->plotOn(plot);
+      }
     plot->Draw();
     canv->Print(Form("%s_%s.png",name.c_str(),it->first.c_str()));
   }
@@ -499,11 +520,20 @@ void PdfModelBuilder::fitToData(RooAbsData *data, bool bkgOnly, bool cache, bool
     if (print){
       cout << "Fit Res Before: " << endl;
       fit->floatParsInit().Print("v");
+    }
+
+    //Try a second fit
+    if (fit->status()!=0) 
+      fit = (RooFitResult*)it->second->fitTo(*data,Save(true));
+
+    if (fit->status()!=0) 
+      cout << "!!!! FIT DID NOT CONVERGE !!!!!" << endl;
+    if (print){
       cout << "Fit Res After: " << endl;
       fit->floatParsFinal().Print("v");
     }
     
-    if (cache) {
+    if (fit->status()==0 && cache) {
       RooArgSet *fitargs = (RooArgSet*)it->second->getParameters(*obs_var);
       wsCache->defineSet(Form("%s_params",it->first.c_str()),*fitargs, kTRUE);
       wsCache->defineSet(Form("%s_observs",it->first.c_str()),*obs_var, kTRUE);
@@ -513,6 +543,7 @@ void PdfModelBuilder::fitToData(RooAbsData *data, bool bkgOnly, bool cache, bool
         fitargs->Print("v");
       }
     }
+
     if (resetAfterFit)
       {
 	RooArgSet *fitargs = (RooArgSet*)it->second->getParameters(*obs_var);
@@ -525,8 +556,11 @@ void PdfModelBuilder::fitToData(RooAbsData *data, bool bkgOnly, bool cache, bool
 	      continue;
 	    myarg->setVal( initVar->getVal() );
 	  }
-        cout << "Reset fit values: " << endl;
-	fitargs->Print("v");
+	if (print)
+	  {
+	    cout << "Reset fit values: " << endl;
+	    fitargs->Print("v");
+	  }
       }
   }
   if (bkgOnly) bkgHasFit=true;
@@ -600,7 +634,7 @@ void PdfModelBuilder::throwHybridToy(string postfix, int nEvents, vector<float> 
   }
 }
 
-void PdfModelBuilder::throwToy(string postfix, int nEvents, bool bkgOnly, bool binned, bool poisson, bool cache){
+void PdfModelBuilder::throwToy(string postfix, int nEvents, bool bkgOnly, bool binned, bool poisson, bool cache, bool overrideCachedMu, float expectSignal){
 
   toyData.clear();
   toyDataSet.clear();
@@ -619,8 +653,16 @@ void PdfModelBuilder::throwToy(string postfix, int nEvents, bool bkgOnly, bool b
     if (cache) {
       wsCache->loadSnapshot(it->first.c_str());
       cout << "Loading snapshot.." << endl;
+      if (overrideCachedMu)
+      {
+	std::cout << "Override mu value with " << expectSignal << std::endl;
+	RooRealVar* mu=(RooRealVar*)wsCache->var(signalModifier->GetName());
+	mu->setVal(expectSignal);
+	mu->Print();
+      }
       it->second->getVariables()->Print("v");
     }
+
     RooAbsData *toy;
     if (binned){
       RooDataHist *toyHist;
