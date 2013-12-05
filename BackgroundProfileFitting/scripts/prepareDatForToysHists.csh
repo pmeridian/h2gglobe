@@ -1,7 +1,8 @@
 #!/bin/tcsh
 
-set outdir=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d
-set outname=biasStudy_legacy_freeze_v2_massFac_d
+#set outdir=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d
+set outdir=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_test
+set outname=biasStudy_legacy_freeze_v2_massFac_test
 
 foreach file ( $1/*txt )
     set base=`basename $file`

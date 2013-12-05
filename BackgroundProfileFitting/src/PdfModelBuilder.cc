@@ -507,7 +507,7 @@ void PdfModelBuilder::plotPdfsToData(RooAbsData *data, int binning, string name,
   delete canv;
 }
 
-void PdfModelBuilder::fitToData(RooAbsData *data, bool bkgOnly, bool cache, bool print, bool resetAfterFit){
+void PdfModelBuilder::fitToData(RooAbsData *data, bool bkgOnly, bool cache, bool print, bool resetAfterFit, bool runMinosOnMu){
   
   map<string,RooAbsPdf*> pdfSet;
   if (bkgOnly) pdfSet = bkgPdfs;
@@ -516,7 +516,12 @@ void PdfModelBuilder::fitToData(RooAbsData *data, bool bkgOnly, bool cache, bool
   float initVal=signalModifier->getVal();
   for (map<string,RooAbsPdf*>::iterator it=pdfSet.begin(); it!=pdfSet.end(); it++){
     signalModifier->setVal(initVal);
-    RooFitResult *fit = (RooFitResult*)it->second->fitTo(*data,Save(true));
+    RooFitResult *fit;
+    if (runMinosOnMu)
+      fit = (RooFitResult*)it->second->fitTo(*data,Save(true),Hesse(false),Minos(*signalModifier));
+    else
+      fit = (RooFitResult*)it->second->fitTo(*data,Save(true));
+
     if (print){
       cout << "Fit Res Before: " << endl;
       fit->floatParsInit().Print("v");
@@ -524,7 +529,12 @@ void PdfModelBuilder::fitToData(RooAbsData *data, bool bkgOnly, bool cache, bool
 
     //Try a second fit
     if (fit->status()!=0) 
-      fit = (RooFitResult*)it->second->fitTo(*data,Save(true));
+      {
+	if (runMinosOnMu)
+	  fit = (RooFitResult*)it->second->fitTo(*data,Save(true),Hesse(false),Minos(*signalModifier));
+	else
+	  fit = (RooFitResult*)it->second->fitTo(*data,Save(true));
+      }
 
     if (fit->status()!=0) 
       cout << "!!!! FIT DID NOT CONVERGE !!!!!" << endl;

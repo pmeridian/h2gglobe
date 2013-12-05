@@ -40,7 +40,7 @@ class PdfModelBuilder {
     map<string,RooAbsPdf*> getSBPdfs();
     RooAbsPdf *getSigPdf();
 
-    void fitToData(RooAbsData *data, bool bkgOnly=true, bool cache=true, bool print=false, bool resetAfterFit=false);
+    void fitToData(RooAbsData *data, bool bkgOnly=true, bool cache=true, bool print=false, bool resetAfterFit=false, bool runMinosOnMu=false);
     void plotPdfsToData(RooAbsData *data, int binning, string name, bool bkgOnly=true, string specificPdfName="", bool getValuesFromCache=false);
     void plotToysWithPdfs(string prefix, int binning, bool bkgOnly=true);
     void plotHybridToy(string prefix, int binning, vector<float> switchOverMasses, vector<string> functions, bool bkgOnly=true);

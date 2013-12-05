@@ -13,7 +13,7 @@ void makeHistsSimpleBias::FillHist(TH1F* histo, string plotType)
   else if (plotType=="err_mu")
     histo->Fill(sigma_mu);
   else if (plotType=="pull_mu")
-    histo->Fill((mu-muTruth)/sigma_mu);
+    histo->Fill(pull);
 }
 
 TH1F* makeHistsSimpleBias::NewHist(TString name, string plotType)

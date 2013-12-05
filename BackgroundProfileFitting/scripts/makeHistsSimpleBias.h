@@ -50,6 +50,7 @@ public :
    // Declaration of leaf types
    Int_t           mass;
    Float_t         mu;
+   Float_t         pull;
    UInt_t          cat;
    Float_t         muTruth;
    Float_t         sigma_mu;
@@ -69,6 +70,7 @@ public :
    // List of branches
    TBranch        *b_mass;   //!
    TBranch        *b_mu;   //!
+   TBranch        *b_pull;   //!
    TBranch        *b_cat;   //!
    TBranch        *b_muTruth;   //!
    TBranch        *b_sigma_mu;   //!
@@ -157,6 +159,7 @@ void makeHistsSimpleBias::Init(TTree *tree)
 
    fChain->SetBranchAddress("mass", &mass, &b_mass);
    fChain->SetBranchAddress("mu", &mu, &b_mu);
+   fChain->SetBranchAddress("pull", &pull, &b_pull);
    fChain->SetBranchAddress("cat", &cat, &b_cat);
    fChain->SetBranchAddress("muTruth", &muTruth, &b_muTruth);
    fChain->SetBranchAddress("sigma_mu", &sigma_mu, &b_sigma_mu);

@@ -189,6 +189,7 @@ int main(int argc, char* argv[]){
   //  int toyn;
   Float_t mu_;
   Float_t sigma_mu_;
+  Float_t pull_;
   Float_t bkgSig1fwhm_;
   Float_t bkgSig2fwhm_;
   Float_t bkgTrue1fwhm_;
@@ -209,6 +210,7 @@ int main(int argc, char* argv[]){
   muTree->Branch("cat", &iCat_, "cat/i");
   muTree->Branch("muTruth", &expectSignal, "muTruth/F");
   muTree->Branch("sigma_mu", &sigma_mu_, "sigma_mu/F");
+  muTree->Branch("pull", &pull_, "pull/F");
   muTree->Branch("bkgTrue1fwhm", &bkgTrue1fwhm_, "bkgTrue1fwhm/F");
   muTree->Branch("bkgTrue2fwhm", &bkgTrue2fwhm_, "bkgTrue2fwhm/F");
   muTree->Branch("bkgSig1fwhm", &bkgSig1fwhm_, "bkgSig1fwhm/F");
@@ -344,7 +346,12 @@ int main(int argc, char* argv[]){
     //       if (!skipPlots) toysModel.plotHybridToy(Form("%s/plots/toys/job%d_toy%d",outDir.c_str(),jobn,toy),80,switchMass,switchFunc,false);
     //     }
     //     else {
-    toysModel.throwToy(Form("truth_job%d_toy%d",jobn,toy),dataBinned->sumEntries(),false,true,true,true,true,expectSignal);
+
+    bool poisson= (dataBinned->sumEntries()>30) ? true : false;
+    bool runMinos= (dataBinned->sumEntries()>30) ? false : true;
+    bool binned= (dataBinned->sumEntries()>200) ? true : false;
+
+    toysModel.throwToy(Form("truth_job%d_toy%d",jobn,toy),dataBinned->sumEntries(),false,binned,poisson,true,true,expectSignal);
     toys = toysModel.getToyData();
     if (!skipPlots) 
       toysModel.plotToysWithPdfs(Form("%s/plots/toys/job%d_toy%d",outDir.c_str(),jobn,toy),80,false);
@@ -357,7 +364,7 @@ int main(int argc, char* argv[]){
 
       testModel.setSignalModifierVal(expectSignal);
       testModel.setSignalModifierConstant(false);
-      testModel.fitToData(it->second,false,true,true,true);
+      testModel.fitToData(it->second,false,true,true,true,runMinos);
       if (!skipPlots)
 	testModel.plotPdfsToData(it->second,80,Form("%s/plots/toys/fit_%s",outDir.c_str(),it->first.c_str()),false,"",true);
 
@@ -372,8 +379,23 @@ int main(int argc, char* argv[]){
 	  }
 
 	mu_= testModel.wsCache->var(mu->GetName())->getVal();
-	sigma_mu_ = testModel.wsCache->var(mu->GetName())->getError();
 	
+	if (testModel.wsCache->var(mu->GetName())->hasAsymError()) {
+	  double delta = mu_-expectSignal ;
+	  sigma_mu_ = (testModel.wsCache->var(mu->GetName())->getAsymErrorHi() - testModel.wsCache->var(mu->GetName())->getAsymErrorLo())/2.;
+	  if (delta<0) {
+	    pull_=delta/testModel.wsCache->var(mu->GetName())->getAsymErrorHi() ;
+	  } else {
+	    pull_=-delta/testModel.wsCache->var(mu->GetName())->getAsymErrorLo() ;
+	  }
+	} else if (testModel.wsCache->var(mu->GetName())->hasError()) {
+	  pull_=(mu_-expectSignal)/testModel.wsCache->var(mu->GetName())->getError() ;    
+	  sigma_mu_ = testModel.wsCache->var(mu->GetName())->getError();
+	}
+	else {
+	  pull_=0.;
+	}
+
 	typedef vector< string > split_vector_type;
     	split_vector_type splitVec_gen; // #2: Search for tokens
     	split_vector_type splitVec_fit; // #2: Search for tokens
