@@ -51,6 +51,17 @@ labelMap['pull']='#mu pull'
 labelMap['mu']='#mu'
 labelMap['err']='#sigma_{#mu} from fit'
 
+def getMaximumBias(graph):
+  maxBias=-999
+  for i in range(0,graph.GetN()):
+    x=r.Double(0)
+    y=r.Double(0)
+    graph.GetPoint(i,x,y)
+    if (x>=115 and x<=135):
+      if (abs(y)>maxBias):
+        maxBias=abs(y)
+  return maxBias
+        
 def drawHists():
   file = r.TFile.Open(options.infile)
 
@@ -148,9 +159,7 @@ def drawHists():
             graphs[(cat,truth,test,plt)]['median'].SetLineColor(colorMap[test])
             graphs[(cat,truth,test,plt)]['median'].SetLineWidth(2)
             graphs[(cat,truth,test,plt)]['median'].Draw("SAMEPL")
-            maxV=r.TMath.MaxElement(graphs[(cat,truth,test,plt)]['median'].GetN(),graphs[(cat,truth,test,plt)]['median'].GetY())
-            minV=r.TMath.MinElement(graphs[(cat,truth,test,plt)]['median'].GetN(),graphs[(cat,truth,test,plt)]['median'].GetY())
-            maxAbsV=max(r.TMath.Abs(maxV),r.TMath.Abs(minV))
+            maxAbsV=getMaximumBias(graphs[(cat,truth,test,plt)]['median'])
             if (plt=="pull"):
               leg.AddEntry(graphs[(cat,truth,test,plt)]['median'],str(test)+": maxBias(%3.2f)"%(maxAbsV),'pl')
             else:

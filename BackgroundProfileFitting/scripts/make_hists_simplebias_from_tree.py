@@ -11,10 +11,9 @@ parser.add_option("-d","--datfile")
 (options,args)=parser.parse_args()
 
 import ROOT as r
-
+r.gROOT.SetBatch(1)
 r.gSystem.Load('lib/libBackgroundProfileFitting.so')
 r.gROOT.ProcessLine('.L scripts/makeHistsSimpleBias.C+g')
-r.gROOT.SetBatch(1)
 
 from ROOT import makeHistsSimpleBias
 

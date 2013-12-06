@@ -1,210 +1,210 @@
 #######  cat 0 with muInj 0.0 ######
 cat=(0,0.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat0_mu0.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat0_mu0.0_list.root
+input=legacy_freeze_v2_massFac_e//cat0_mu0.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat0_mu0.0_list.root
 #######  cat 0 with muInj 1.0 ######
 cat=(0,1.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat0_mu1.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat0_mu1.0_list.root
+input=legacy_freeze_v2_massFac_e//cat0_mu1.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat0_mu1.0_list.root
 #######  cat 0 with muInj 3.0 ######
 cat=(0,3.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat0_mu3.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat0_mu3.0_list.root
+input=legacy_freeze_v2_massFac_e//cat0_mu3.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat0_mu3.0_list.root
 #######  cat 10 with muInj 0.0 ######
 cat=(10,0.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat10_mu0.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat10_mu0.0_list.root
+input=legacy_freeze_v2_massFac_e//cat10_mu0.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat10_mu0.0_list.root
 #######  cat 10 with muInj 1.0 ######
 cat=(10,1.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat10_mu1.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat10_mu1.0_list.root
+input=legacy_freeze_v2_massFac_e//cat10_mu1.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat10_mu1.0_list.root
 #######  cat 10 with muInj 3.0 ######
 cat=(10,3.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat10_mu3.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat10_mu3.0_list.root
+input=legacy_freeze_v2_massFac_e//cat10_mu3.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat10_mu3.0_list.root
 #######  cat 11 with muInj 0.0 ######
 cat=(11,0.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat11_mu0.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat11_mu0.0_list.root
+input=legacy_freeze_v2_massFac_e//cat11_mu0.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat11_mu0.0_list.root
 #######  cat 11 with muInj 1.0 ######
 cat=(11,1.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat11_mu1.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat11_mu1.0_list.root
+input=legacy_freeze_v2_massFac_e//cat11_mu1.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat11_mu1.0_list.root
 #######  cat 11 with muInj 3.0 ######
 cat=(11,3.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat11_mu3.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat11_mu3.0_list.root
+input=legacy_freeze_v2_massFac_e//cat11_mu3.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat11_mu3.0_list.root
 #######  cat 12 with muInj 0.0 ######
 cat=(12,0.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat12_mu0.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat12_mu0.0_list.root
+input=legacy_freeze_v2_massFac_e//cat12_mu0.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat12_mu0.0_list.root
 #######  cat 12 with muInj 1.0 ######
 cat=(12,1.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat12_mu1.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat12_mu1.0_list.root
+input=legacy_freeze_v2_massFac_e//cat12_mu1.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat12_mu1.0_list.root
 #######  cat 12 with muInj 3.0 ######
 cat=(12,3.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat12_mu3.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat12_mu3.0_list.root
+input=legacy_freeze_v2_massFac_e//cat12_mu3.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat12_mu3.0_list.root
 #######  cat 13 with muInj 0.0 ######
 cat=(13,0.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat13_mu0.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat13_mu0.0_list.root
+input=legacy_freeze_v2_massFac_e//cat13_mu0.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat13_mu0.0_list.root
 #######  cat 13 with muInj 1.0 ######
 cat=(13,1.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat13_mu1.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat13_mu1.0_list.root
+input=legacy_freeze_v2_massFac_e//cat13_mu1.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat13_mu1.0_list.root
 #######  cat 13 with muInj 3.0 ######
 cat=(13,3.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat13_mu3.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat13_mu3.0_list.root
+input=legacy_freeze_v2_massFac_e//cat13_mu3.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat13_mu3.0_list.root
 #######  cat 1 with muInj 0.0 ######
 cat=(1,0.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat1_mu0.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat1_mu0.0_list.root
+input=legacy_freeze_v2_massFac_e//cat1_mu0.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat1_mu0.0_list.root
 #######  cat 1 with muInj 1.0 ######
 cat=(1,1.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat1_mu1.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat1_mu1.0_list.root
+input=legacy_freeze_v2_massFac_e//cat1_mu1.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat1_mu1.0_list.root
 #######  cat 1 with muInj 3.0 ######
 cat=(1,3.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat1_mu3.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat1_mu3.0_list.root
+input=legacy_freeze_v2_massFac_e//cat1_mu3.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat1_mu3.0_list.root
 #######  cat 2 with muInj 0.0 ######
 cat=(2,0.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat2_mu0.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat2_mu0.0_list.root
+input=legacy_freeze_v2_massFac_e//cat2_mu0.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat2_mu0.0_list.root
 #######  cat 2 with muInj 1.0 ######
 cat=(2,1.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat2_mu1.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat2_mu1.0_list.root
+input=legacy_freeze_v2_massFac_e//cat2_mu1.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat2_mu1.0_list.root
 #######  cat 2 with muInj 3.0 ######
 cat=(2,3.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat2_mu3.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat2_mu3.0_list.root
+input=legacy_freeze_v2_massFac_e//cat2_mu3.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat2_mu3.0_list.root
 #######  cat 3 with muInj 0.0 ######
 cat=(3,0.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat3_mu0.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat3_mu0.0_list.root
+input=legacy_freeze_v2_massFac_e//cat3_mu0.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat3_mu0.0_list.root
 #######  cat 3 with muInj 1.0 ######
 cat=(3,1.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat3_mu1.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat3_mu1.0_list.root
+input=legacy_freeze_v2_massFac_e//cat3_mu1.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat3_mu1.0_list.root
 #######  cat 3 with muInj 3.0 ######
 cat=(3,3.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat3_mu3.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat3_mu3.0_list.root
+input=legacy_freeze_v2_massFac_e//cat3_mu3.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat3_mu3.0_list.root
 #######  cat 4 with muInj 0.0 ######
 cat=(4,0.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat4_mu0.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat4_mu0.0_list.root
+input=legacy_freeze_v2_massFac_e//cat4_mu0.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat4_mu0.0_list.root
 #######  cat 4 with muInj 1.0 ######
 cat=(4,1.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat4_mu1.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat4_mu1.0_list.root
+input=legacy_freeze_v2_massFac_e//cat4_mu1.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat4_mu1.0_list.root
 #######  cat 4 with muInj 3.0 ######
 cat=(4,3.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat4_mu3.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat4_mu3.0_list.root
+input=legacy_freeze_v2_massFac_e//cat4_mu3.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat4_mu3.0_list.root
 #######  cat 5 with muInj 0.0 ######
 cat=(5,0.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat5_mu0.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat5_mu0.0_list.root
+input=legacy_freeze_v2_massFac_e//cat5_mu0.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat5_mu0.0_list.root
 #######  cat 5 with muInj 1.0 ######
 cat=(5,1.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat5_mu1.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat5_mu1.0_list.root
+input=legacy_freeze_v2_massFac_e//cat5_mu1.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat5_mu1.0_list.root
 #######  cat 5 with muInj 3.0 ######
 cat=(5,3.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat5_mu3.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat5_mu3.0_list.root
+input=legacy_freeze_v2_massFac_e//cat5_mu3.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat5_mu3.0_list.root
 #######  cat 6 with muInj 0.0 ######
 cat=(6,0.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat6_mu0.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat6_mu0.0_list.root
+input=legacy_freeze_v2_massFac_e//cat6_mu0.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat6_mu0.0_list.root
 #######  cat 6 with muInj 1.0 ######
 cat=(6,1.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat6_mu1.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat6_mu1.0_list.root
+input=legacy_freeze_v2_massFac_e//cat6_mu1.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat6_mu1.0_list.root
 #######  cat 6 with muInj 3.0 ######
 cat=(6,3.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat6_mu3.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat6_mu3.0_list.root
+input=legacy_freeze_v2_massFac_e//cat6_mu3.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat6_mu3.0_list.root
 #######  cat 7 with muInj 0.0 ######
 cat=(7,0.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat7_mu0.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat7_mu0.0_list.root
+input=legacy_freeze_v2_massFac_e//cat7_mu0.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat7_mu0.0_list.root
 #######  cat 7 with muInj 1.0 ######
 cat=(7,1.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat7_mu1.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat7_mu1.0_list.root
+input=legacy_freeze_v2_massFac_e//cat7_mu1.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat7_mu1.0_list.root
 #######  cat 7 with muInj 3.0 ######
 cat=(7,3.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat7_mu3.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat7_mu3.0_list.root
+input=legacy_freeze_v2_massFac_e//cat7_mu3.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat7_mu3.0_list.root
 #######  cat 8 with muInj 0.0 ######
 cat=(8,0.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat8_mu0.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat8_mu0.0_list.root
+input=legacy_freeze_v2_massFac_e//cat8_mu0.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat8_mu0.0_list.root
 #######  cat 8 with muInj 1.0 ######
 cat=(8,1.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat8_mu1.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat8_mu1.0_list.root
+input=legacy_freeze_v2_massFac_e//cat8_mu1.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat8_mu1.0_list.root
 #######  cat 8 with muInj 3.0 ######
 cat=(8,3.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat8_mu3.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat8_mu3.0_list.root
+input=legacy_freeze_v2_massFac_e//cat8_mu3.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat8_mu3.0_list.root
 #######  cat 9 with muInj 0.0 ######
 cat=(9,0.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat9_mu0.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat9_mu0.0_list.root
+input=legacy_freeze_v2_massFac_e//cat9_mu0.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat9_mu0.0_list.root
 #######  cat 9 with muInj 1.0 ######
 cat=(9,1.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat9_mu1.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat9_mu1.0_list.root
+input=legacy_freeze_v2_massFac_e//cat9_mu1.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat9_mu1.0_list.root
 #######  cat 9 with muInj 3.0 ######
 cat=(9,3.0)
 plot=mu(200:-10:10),err_mu(100:0:5),pull_mu(200:-2.5:2.5)
-input=legacy_freeze_v2_massFac_d//cat9_mu3.0_list.txt
-outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_d/biasStudy_legacy_freeze_v2_massFac_d_cat9_mu3.0_list.root
+input=legacy_freeze_v2_massFac_e//cat9_mu3.0_list.txt
+outfile=root://eoscms//eos/cms/store/group/phys_higgs/meridian/BiasStudy/legacy_freeze_v2_massFac_e/biasStudy_legacy_freeze_v2_massFac_e_cat9_mu3.0_list.root

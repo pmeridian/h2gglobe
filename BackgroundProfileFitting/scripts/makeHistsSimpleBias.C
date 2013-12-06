@@ -79,10 +79,10 @@ void makeHistsSimpleBias::Loop()
      if (ientry < 0) break;
       nb = fChain->GetEntry(jentry);   nbytes += nb;
       //Check quality of the fit
-      if (sigma_mu<=0.1)
-	continue;
-      if (fabs(fabs(mu)-10)<=0.1)
-	continue;
+//       if (sigma_mu<=0.1)
+// 	continue;
+//       if (fabs(fabs(mu)-10)<=0.1)
+// 	continue;
 
 //       if (sigma_mu>10)
 // 	continue;

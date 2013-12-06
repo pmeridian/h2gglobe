@@ -24,7 +24,7 @@
 
 #include "../interface/PdfModelBuilder.h"
 
-#include "HiggsAnalysis/CombinedLimit/interface/HGGRooPdfs.h"
+//#include "HiggsAnalysis/CombinedLimit/interface/HGGRooPdfs.h"
 #include "HiggsAnalysis/CombinedLimit/interface/RooBernsteinFast.h"
 
 using namespace std;
@@ -545,6 +545,9 @@ void PdfModelBuilder::fitToData(RooAbsData *data, bool bkgOnly, bool cache, bool
     
     if (fit->status()==0 && cache) {
       RooArgSet *fitargs = (RooArgSet*)it->second->getParameters(*obs_var);
+      fit->SetName(Form("%s_fitResult",it->first.c_str()));
+      std::cout << "*** " << Form("%s_fitResult",it->first.c_str()) << std::endl;
+      wsCache->import(*fit);
       wsCache->defineSet(Form("%s_params",it->first.c_str()),*fitargs, kTRUE);
       wsCache->defineSet(Form("%s_observs",it->first.c_str()),*obs_var, kTRUE);
       wsCache->saveSnapshot(it->first.c_str(),*fitargs,true);
