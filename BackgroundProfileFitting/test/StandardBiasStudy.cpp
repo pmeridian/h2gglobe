@@ -111,7 +111,7 @@ int main(int argc, char* argv[]){
   int ntoys;
   int jobn;
   int seed;
-  bool bkgOnly;
+  bool bkgOnly=false;
   float mu_low;
   float mu_high;
   float expectSignal;
@@ -133,7 +133,7 @@ int main(int argc, char* argv[]){
     ("datfile,d", po::value<string>(&datFileName)->default_value("config.dat"),                 "Name of datfile containing pdf info")
     ("outDir,D", po::value<string>(&outDir)->default_value("./"),                               "Name of out directory for plots")
     ("cat,c", po::value<int>(&cat),                                                             "Category")
-    ("bkgOnly", po::value<bool>(&bkgOnly),                                                    "bkg Only")
+    ("bkgOnly",                                                                                 "bkg Only")
     ("ntoys,t", po::value<int>(&ntoys)->default_value(0),                                       "Number of toys to run")
     ("jobn,j", po::value<int>(&jobn)->default_value(0),                                         "Job number")
     ("seed,r", po::value<int>(&seed)->default_value(0),                                         "Set random seed")
@@ -150,6 +150,7 @@ int main(int argc, char* argv[]){
   po::notify(vm);
   if (vm.count("help")) { cout << desc << endl; exit(1); }
   if (vm.count("skipPlots")) skipPlots=true;
+  if (vm.count("bkgOnly")) bkgOnly=true;
   if (expectSignalMass!=110 && expectSignalMass!=115 && expectSignalMass!=120 && expectSignalMass!=125 && expectSignalMass!=130 && expectSignalMass!=135 && expectSignalMass!=140 && expectSignalMass!=145 && expectSignalMass!=150){
     cerr << "ERROR - expectSignalMass has to be integer in range (110,150,5)" << endl;
     exit(1);
@@ -258,6 +259,7 @@ int main(int argc, char* argv[]){
   int bin2=sigMC_hist->FindLastBinAbove(sigMC_hist->GetMaximum()/2.);
   float fwhm= sigMC_hist->GetBinCenter(bin2)- sigMC_hist->GetBinCenter(bin1);
   float maxMass=sigMC_hist->GetBinCenter(sigMC_hist->GetMaximumBin());
+  std::cout << "[INFO]::Signal peak @"<< maxMass << " FWHM/2.35 " << fwhm/2.35 << std::endl;
   mass->setRange("sigWindow",maxMass-fwhm/2.,maxMass+fwhm/2.);
   mass->setRange("sigWindow2",maxMass-fwhm,maxMass+fwhm);
   //RooExtendPdf *ggh_pdf = (RooExtendPdf*)sigWS->pdf(Form("sigpdfsmrel_cat%d_7TeV_ggh",cat));
@@ -305,11 +307,6 @@ int main(int argc, char* argv[]){
   toysModel.makeSBPdfs(true);
   map<string,RooAbsPdf*> toyBkgPdfs = toysModel.getBkgPdfs();
   map<string,RooAbsPdf*> toySBPdfs = toysModel.getSBPdfs();
-  std::pair<string,RooAbsPdf*> it; 
-  BOOST_FOREACH(it, toySBPdfs)
-    {
-      std::cout << "&&&&&& " << it.first << std::endl;
-    }
   
   toysModel.setSeed(seed);
 
@@ -369,7 +366,7 @@ int main(int argc, char* argv[]){
     //     }
     //     else {
 
-    bool poisson= (dataBinned->sumEntries()>30) ? true : false;
+    bool poisson= (dataBinned->sumEntries()>30 || bkgOnly) ? true : false;
     bool runMinos= (dataBinned->sumEntries()>100) ? false : true;
     bool binned= (dataBinned->sumEntries()>500) ? true : false;
 
@@ -378,12 +375,19 @@ int main(int argc, char* argv[]){
     if (!skipPlots) 
       toysModel.plotToysWithPdfs(Form("%s/plots/toys/job%d_toy%d",outDir.c_str(),jobn,toy),80,false);
     //     }
+
     for (map<string,RooAbsData*>::iterator it=toys.begin(); it!=toys.end(); it++){
        // ----- USEFUL DEBUG -----------
        //  --- this can be a useful check that the truth model values are being cached properly ---
        //toysModel.fitToData(it->second,true,false,true);
        //toysModel.plotPdfsToData(it->second,80,Form("%s/plots/toys/job%d_toy%d",outDir.c_str(),jobn,toy),true,"NONE");
-
+      //Integral functions
+      vector< string > toyNameTokens;
+      boost::split_regex( toyNameTokens, it->first, boost::regex("_truth_job") );
+      RooAbsReal *intBkgRange = toySBPdfs.find(toyNameTokens[0])->second->createIntegral(*mass,NormSet(*mass),Range("sigWindow"));
+      RooAbsReal *int2BkgRange = toySBPdfs.find(toyNameTokens[0])->second->createIntegral(*mass,NormSet(*mass),Range("sigWindow2"));
+      bkgTrue1fwhm_ =  intBkgRange->getVal() * dataBinned->sumEntries();
+      bkgTrue2fwhm_ =  int2BkgRange->getVal() * dataBinned->sumEntries();
       if (!bkgOnly)
 	{
 	  testModel.setSignalModifierVal(expectSignal);
@@ -391,31 +395,33 @@ int main(int argc, char* argv[]){
 	}
       else
 	{
+	  std::cout << "[INFO]:: Setting signal modifier constant to 0" << std::endl;
 	  testModel.setSignalModifierVal(0);
 	  testModel.setSignalModifierConstant(true);
 	}
 
       testModel.fitToData(it->second,false,true,!skipPlots,true,runMinos);
       if (!skipPlots)
-	testModel.plotPdfsToData(it->second,80,Form("%s/plots/toys/fit_%s",outDir.c_str(),it->first.c_str()),false,"",true);
+	testModel.plotPdfsToData(it->second,80,Form("%s/plots/toys/fit_%s",outDir.c_str(),it->first.c_str()),false,"",true,true);
 
       //      testModel.wsCache->Print("v");
-      vector< string > toyNameTokens;
-      boost::split_regex( toyNameTokens, it->first, boost::regex("_truth_job") );
-//       BOOST_FOREACH(string t, toyNameTokens)
-// 	{
-// 	  std::cout << t << std::endl;
-// 	}
-      std::cout << toyNameTokens[0] << std::endl; 
-      RooAbsReal *intBkgRange = toySBPdfs.find(toyNameTokens[0])->second->createIntegral(*mass,NormSet(*mass),Range("sigWindow"));
-      RooAbsReal *int2BkgRange = toySBPdfs.find(toyNameTokens[0])->second->createIntegral(*mass,NormSet(*mass),Range("sigWindow2"));
-      std::cout << "OK" << std::endl;
+
+
+
 
       // -----  SAVE RESULTS IN THE TREE ----- 
       for (map<string,RooAbsPdf*>::iterator itf=testSBPdfs.begin(); itf!=testSBPdfs.end(); itf++){
+
 	if (!testModel.wsCache->loadSnapshot(itf->first.c_str()))
 	  {
 	    cout << "CANNOT GET WS SNAPSHOT " << itf->first << endl;
+	    continue;
+	  }
+	
+	RooFitResult* fit=(RooFitResult*) testModel.wsCache->obj(Form("%s_fitResult",itf->first.c_str()));
+	if (!fit)
+	  {
+	    cout << "CANNOT GET FIT RESULTS " << Form("%s_fitResult",itf->first.c_str()) << endl;
 	    continue;
 	  }
 
@@ -437,11 +443,22 @@ int main(int argc, char* argv[]){
 	  pull_=0.;
 	}
 	
-	RooFitResult* fit=(RooFitResult*) testModel.wsCache->FindObject(Form("%s_fitResult",itf->first.c_str()));
-	std::cout << Form("%s_fitResult",itf->first.c_str()) << std::endl;
-	std::cout << "OK2" << fit << std::endl;
-	fit->Print("v"); 
+	// Need to read values from the cache and set them for the pdf (because they were reset to init values...). Caching init values for reset later
+	std::map<string, float> initVal;
+	RooArgSet *fitargs = (RooArgSet*)itf->second->getParameters(*mass);
+	RooLinkedListIter var = fitargs->iterator();
+	RooRealVar *myarg; 
+	while ((myarg = (RooRealVar *)var.Next()))
+	  { 
+	    RooRealVar* cacheVar= (RooRealVar*) testModel.wsCache->var(myarg->GetName());
+	    if (!cacheVar)
+	      continue;
+	    initVal[myarg->GetName()]=myarg->getVal();
+	    myarg->setVal( cacheVar->getVal() );
+	  }
+	
 
+	//Integrals for the fitted functions
 	RooAbsReal *intRange = itf->second->createIntegral(*mass,NormSet(*mass),Range("sigWindow"));
 	RooFormulaVar *normIntRange= new RooFormulaVar(Form("normIntRange_m%d_cat%d",expectSignalMass,cat),Form("normIntRange_m%d_cat%d",expectSignalMass,cat),"@0*@1",RooArgList(*intRange,*testModel.wsCache->var("bkg_yield")));
 	RooAbsReal *int2Range = itf->second->createIntegral(*mass,NormSet(*mass),Range("sigWindow2"));
@@ -449,12 +466,12 @@ int main(int argc, char* argv[]){
 
 	bkgSig1fwhm_ = normIntRange->getVal();
 	bkgSig2fwhm_ = normInt2Range->getVal();
-	bkgTrue1fwhm_ =  intBkgRange->getVal() * it->second->sumEntries();
-	bkgTrue2fwhm_ =  int2BkgRange->getVal() * it->second->sumEntries();
+	//Full uncertainty
 	bkgErrSig1fwhm_ = normIntRange->getPropagatedError(*fit);
 	bkgErrSig2fwhm_ = normInt2Range->getPropagatedError(*fit);
-	bkgErrNormSig1fwhm_ = normIntRange->getPropagatedError(*fit) ;
-	bkgErrNormSig2fwhm_ = normInt2Range->getPropagatedError(*fit) ;
+	//Pure shape uncertainty
+ 	bkgErrNormSig1fwhm_ = intRange->getPropagatedError(*fit) ;
+ 	bkgErrNormSig2fwhm_ = int2Range->getPropagatedError(*fit) ;
       
  	delete intRange;
  	delete normIntRange;
@@ -469,13 +486,23 @@ int main(int argc, char* argv[]){
 	sprintf(genName_,"%s",splitVec_gen[2].c_str());	
 	sprintf(fitName_,"%s",splitVec_fit[2].c_str());
 	muTree->Fill();
+
+	// Now resetting again after fill...
+	std::pair<string,float> map_pair;
+	BOOST_FOREACH(map_pair,initVal)
+	  {
+	    RooRealVar* var=(RooRealVar*) fitargs->find(map_pair.first.c_str());
+	    var->setVal(map_pair.second);
+	  }
+
+	//Cleaning
 	testModel.wsCache->Clear();
       }
+      //Cleaning
       delete intBkgRange;
       delete int2BkgRange;
       delete it->second;
     }
-
   }
 
   outFile->cd();

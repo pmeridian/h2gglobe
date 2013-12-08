@@ -20,13 +20,17 @@ r.gStyle.SetOptTitle(0)
 
 ranges={}
 ranges["mu"]=(-5,5)
-ranges["pull"]=(-0.1,0.1)
-ranges["err"]=(0,4)
+ranges["pullMu"]=(-0.1,0.1)
+ranges["pullBkg"]=(-0.1,0.1)
+ranges["errMu"]=(0,4)
+ranges["errBkg"]=(0,4)
 
 drawRanges={}
 drawRanges["mu"]=(-2,2)
-drawRanges["pull"]=(-2,2)
-drawRanges["err"]=(0,4)
+drawRanges["pullMu"]=(-2,2)
+drawRanges["pullBkg"]=(-2,2)
+drawRanges["errBkg"]=(0,4)
+drawRanges["errMu"]=(0,4)
 
 colorMap={}
 colorMap['exp1']=r.kRed
@@ -47,9 +51,11 @@ colorMap['pol6']=r.kRed-9
 colorMap['pol7']=r.kGreen-7
 
 labelMap={}
-labelMap['pull']='#mu pull'
+labelMap['pullMu']='#mu pull'
+labelMap['pullBkg']='bkg in 1FWHM pull'
 labelMap['mu']='#mu'
-labelMap['err']='#sigma_{#mu} from fit'
+labelMap['errMu']='#sigma_{#mu} from fit'
+labelMap['errBkg']='#sigma_{bkg} from fit'
 
 def getMaximumBias(graph):
   maxBias=-999
@@ -128,8 +134,11 @@ def drawHists():
           leg=r.TLegend(0.12,0.68,0.4,0.88)
           leg.SetBorderSize(0)
           leg.SetFillColor(0)
-          if (plt=="pull"):
-            box=r.TBox(110,-0.15,150,0.15)
+          if (plt.find("pull")>-1):
+            maxBias=0.15
+            if (plt.find("pullBkg")>-1):
+              maxBias=0.2
+            box=r.TBox(110,-maxBias,150,maxBias)
             box.SetFillColor(r.kGray)
             box.SetFillStyle(3001)
             box.SetLineColor(r.kBlack)
@@ -141,12 +150,12 @@ def drawHists():
             line.SetLineStyle(2)
             line.SetLineWidth(1)
             line.Draw()
-            line1=r.TLine(110,0.15,150,0.15)
+            line1=r.TLine(110,maxBias,150,maxBias)
             line1.SetLineColor(r.kBlack)
             line1.SetLineStyle(2)
             line1.SetLineWidth(1)
             line1.Draw()
-            line2=r.TLine(110,-0.15,150,-0.15)
+            line2=r.TLine(110,-maxBias,150,-maxBias)
             line2.SetLineColor(r.kBlack)
             line2.SetLineStyle(2)
             line2.SetLineWidth(1)
@@ -160,7 +169,7 @@ def drawHists():
             graphs[(cat,truth,test,plt)]['median'].SetLineWidth(2)
             graphs[(cat,truth,test,plt)]['median'].Draw("SAMEPL")
             maxAbsV=getMaximumBias(graphs[(cat,truth,test,plt)]['median'])
-            if (plt=="pull"):
+            if (plt.find("pull")>-1):
               leg.AddEntry(graphs[(cat,truth,test,plt)]['median'],str(test)+": maxBias(%3.2f)"%(maxAbsV),'pl')
             else:
               leg.AddEntry(graphs[(cat,truth,test,plt)]['median'],str(test),'pl')

@@ -21,10 +21,11 @@
 #include "boost/algorithm/string/split.hpp"
 #include "boost/algorithm/string/classification.hpp"
 #include "boost/algorithm/string/predicate.hpp"
+#include "boost/foreach.hpp"
 
 #include "../interface/PdfModelBuilder.h"
 
-//#include "HiggsAnalysis/CombinedLimit/interface/HGGRooPdfs.h"
+#include "HiggsAnalysis/CombinedLimit/interface/HGGRooPdfs.h"
 #include "HiggsAnalysis/CombinedLimit/interface/RooBernsteinFast.h"
 
 using namespace std;
@@ -467,7 +468,7 @@ RooAbsPdf* PdfModelBuilder::getSigPdf(){
   return sigPdf;
 }
 
-void PdfModelBuilder::plotPdfsToData(RooAbsData *data, int binning, string name, bool bkgOnly, string specificPdfName, bool getValuesFromCache){
+void PdfModelBuilder::plotPdfsToData(RooAbsData *data, int binning, string name, bool bkgOnly, string specificPdfName, bool getValuesFromCache, bool resetAfterPlot){
   
   TCanvas *canv = new TCanvas();
   bool specPdf=false;
@@ -481,8 +482,10 @@ void PdfModelBuilder::plotPdfsToData(RooAbsData *data, int binning, string name,
     if (specPdf && it->first!=specificPdfName && specificPdfName!="NONE") continue;
     RooPlot *plot = obs_var->frame();
     data->plotOn(plot,Binning(binning));
+
     if (specificPdfName!="NONE") 
       {
+	std::map<string, float> initVal;
 	if (getValuesFromCache)
 	  {
 	    RooArgSet *fitargs = (RooArgSet*)it->second->getParameters(*obs_var);
@@ -493,13 +496,24 @@ void PdfModelBuilder::plotPdfsToData(RooAbsData *data, int binning, string name,
 	    RooRealVar *myarg; 
 	    while ((myarg = (RooRealVar *)it.Next()))
 	      { 
-		RooRealVar* initVar= (RooRealVar*) wsCache->var(myarg->GetName());
-		if (!initVar)
+		RooRealVar* cacheVar= (RooRealVar*) wsCache->var(myarg->GetName());
+		if (!cacheVar)
 		  continue;
-		myarg->setVal( initVar->getVal() );
-	      } 
+		initVal[myarg->GetName()]=myarg->getVal();
+		myarg->setVal( cacheVar->getVal() );
+	      }
 	  }
 	it->second->plotOn(plot);
+	if (resetAfterPlot)
+	  {
+	    std::pair<string,float> map_pair;
+	    RooArgSet *fitargs = (RooArgSet*)it->second->getParameters(*obs_var);
+	    BOOST_FOREACH(map_pair,initVal)
+	      {
+		RooRealVar* var=(RooRealVar*) fitargs->find(map_pair.first.c_str());
+		var->setVal(map_pair.second);
+	      }
+	  }
       }
     plot->Draw();
     canv->Print(Form("%s_%s.png",name.c_str(),it->first.c_str()));
@@ -514,10 +528,13 @@ void PdfModelBuilder::fitToData(RooAbsData *data, bool bkgOnly, bool cache, bool
   else pdfSet = sbPdfs;
 
   float initVal=signalModifier->getVal();
+  bool constStatus=signalModifier->isConstant();
   for (map<string,RooAbsPdf*>::iterator it=pdfSet.begin(); it!=pdfSet.end(); it++){
     signalModifier->setVal(initVal);
+    signalModifier->setConstant(constStatus);
+
     RooFitResult *fit;
-    if (runMinosOnMu)
+    if (runMinosOnMu && !constStatus)
       fit = (RooFitResult*)it->second->fitTo(*data,Save(true),Hesse(false),Minos(*signalModifier));
     else
       fit = (RooFitResult*)it->second->fitTo(*data,Save(true));
@@ -530,7 +547,7 @@ void PdfModelBuilder::fitToData(RooAbsData *data, bool bkgOnly, bool cache, bool
     //Try a second fit
     if (fit->status()!=0) 
       {
-	if (runMinosOnMu)
+	if (runMinosOnMu && !constStatus)
 	  fit = (RooFitResult*)it->second->fitTo(*data,Save(true),Hesse(false),Minos(*signalModifier));
 	else
 	  fit = (RooFitResult*)it->second->fitTo(*data,Save(true));
@@ -546,8 +563,7 @@ void PdfModelBuilder::fitToData(RooAbsData *data, bool bkgOnly, bool cache, bool
     if (fit->status()==0 && cache) {
       RooArgSet *fitargs = (RooArgSet*)it->second->getParameters(*obs_var);
       fit->SetName(Form("%s_fitResult",it->first.c_str()));
-      std::cout << "*** " << Form("%s_fitResult",it->first.c_str()) << std::endl;
-      wsCache->import(*fit);
+      wsCache->import(*fit,Form("%s_fitResult",it->first.c_str()),true);
       wsCache->defineSet(Form("%s_params",it->first.c_str()),*fitargs, kTRUE);
       wsCache->defineSet(Form("%s_observs",it->first.c_str()),*obs_var, kTRUE);
       wsCache->saveSnapshot(it->first.c_str(),*fitargs,true);

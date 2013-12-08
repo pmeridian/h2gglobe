@@ -22,6 +22,7 @@ parser.add_option("-q","--queue",dest="queue",type="str",default="8nh",help="Whi
 parser.add_option("-e","--eosPath",dest="eosPath",help="Write output files to eos")
 parser.add_option("--takeOtherFiles",type="str",help="Copy these files over to batch sandbox")
 parser.add_option("","--skipPlots",default=False,action="store_true",help="Don\'t plot all the envelopes")
+parser.add_option("","--bkgOnly",default=False,action="store_true",help="Background only toys (mu forced to 0)")
 parser.add_option("","--useCondor",dest="useCondor",default=False,action="store_true",help="Submit locally using condor")
 parser.add_option("","--copyWorkspace",dest="copyWorkspace",default=False,action="store_true",help="Copy the workspaces into the running sandbox")
 parser.add_option("","--dryRun",dest="dryRun",default=False,action="store_true",help="Don't submit")
@@ -41,6 +42,7 @@ def writeSubScript(cat,mlow,mhigh,outdir,muInject,massInject):
   subline = './StandardBiasStudy -s %s -b %s --sigwsname %s --bkgwsname %s -d %s -c %d -L %3.1f -H %3.1f -t %d -D %s --expectSignal=%3.1f --expectSignalMass=%3d'%(os.path.basename(options.sigfilename) if options.copyWorkspace else options.sigfilename,os.path.basename(options.bkgfilename) if options.copyWorkspace else options.bkgfilename,options.sigwsname,options.bkgwsname,os.path.basename(options.datfile),cat,mlow,mhigh,options.toysperjob,os.path.abspath(outdir),muInject,massInject)
 
   if options.skipPlots: subline += ' --skipPlots'
+  if options.bkgOnly: subline += ' --bkgOnly'
 
   for j in range(options.jstart,options.njobs):
     f = open('%s/%s/sub_cat%d_job%d.sh'%(os.getcwd(),outdir,cat,j),'w')

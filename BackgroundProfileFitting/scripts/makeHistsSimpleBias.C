@@ -10,10 +10,14 @@ void makeHistsSimpleBias::FillHist(TH1F* histo, string plotType)
 {
   if (plotType=="mu")
     histo->Fill(mu);
-  else if (plotType=="err_mu")
+  else if (plotType=="errMu")
     histo->Fill(sigma_mu);
-  else if (plotType=="pull_mu")
+  else if (plotType=="errBkg")
+    histo->Fill(bkgErrSig1fwhm/bkgSig1fwhm);
+  else if (plotType=="pullMu")
     histo->Fill(pull);
+  else if (plotType=="pullBkg")
+    histo->Fill( (bkgSig1fwhm-bkgTrue1fwhm)/bkgErrSig1fwhm);
 }
 
 TH1F* makeHistsSimpleBias::NewHist(TString name, string plotType)
