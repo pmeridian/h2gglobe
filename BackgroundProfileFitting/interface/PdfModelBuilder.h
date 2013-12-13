@@ -28,6 +28,8 @@ class PdfModelBuilder {
     void setSignalModifier(RooRealVar *var);
     void setSignalModifierVal(float val);
     void setSignalModifierConstant(bool val);
+    void setSignalModifierGaussianConstraint(float val, float sigma);
+
     void setKeysPdfAttributes(RooDataSet *data, double rho=2);
 
     void addBkgPdf(string type, int nParams, string name, bool cache=true);
@@ -36,18 +38,19 @@ class PdfModelBuilder {
     void setSignalPdfFromMC(RooDataSet *data);
     void makeSBPdfs(bool cache=true);
 
+
     map<string,RooAbsPdf*> getBkgPdfs();
     map<string,RooAbsPdf*> getSBPdfs();
     RooAbsPdf *getSigPdf();
 
-    void fitToData(RooAbsData *data, bool bkgOnly=true, bool cache=true, bool print=false, bool resetAfterFit=false, bool runMinosOnMu=false);
+    void fitToData(RooAbsData *data, bool bkgOnly=true, bool cache=true, bool print=false, bool resetAfterFit=false, bool runMinosOnMu=false, bool withConstraintOnMu=false);
     void plotPdfsToData(RooAbsData *data, int binning, string name, bool bkgOnly=true, string specificPdfName="", bool getValuesFromCache=false, bool resetAfterPlot=false);
     void plotToysWithPdfs(string prefix, int binning, bool bkgOnly=true);
     void plotHybridToy(string prefix, int binning, vector<float> switchOverMasses, vector<string> functions, bool bkgOnly=true);
 
     
     void setSeed(int seed);
-    void throwToy(string name, int nEvents, bool bkgOnly=true, bool binned=true, bool poisson=true, bool cache=true, bool overrideCachedMu=false, float expectSignal=0.0);
+    void throwToy(string name, int nEvents, bool bkgOnly=true, bool binned=true, bool poisson=true, bool cache=true, bool overrideCachedMu=false, float expectSignal=0.0 );
     RooDataSet *makeHybridDataset(vector<float> switchOverMasses, vector<RooDataSet*> dataForHybrid);
     void throwHybridToy(string name, int nEvents, vector<float> switchOverMasses, vector<string> functions, bool bkgOnly=true, bool binned=true, bool poisson=true, bool cache=true);
     map<string,RooAbsData*> getToyData();
@@ -77,10 +80,13 @@ class PdfModelBuilder {
     map<string,RooAbsPdf*> sbPdfs;
     RooAbsPdf* sigPdf;
     RooAbsReal* sigNorm;
+    RooAbsPdf* sigConstraint;
+
     RooRealVar *bkgYield;
     RooAbsReal *sigYield;
     RooDataSet *keysPdfData;
     double keysPdfRho;
+
 
     map<string,RooAbsData*> toyData;
     map<string,RooAbsData*> toyHybridData;

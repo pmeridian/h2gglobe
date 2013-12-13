@@ -54,6 +54,7 @@ public :
    UInt_t          cat;
    Float_t         muTruth;
    Float_t         sigma_mu;
+   Float_t         sigma_mu_constraint;
    Float_t         bkgTrue1fwhm;
    Float_t         bkgTrue2fwhm;
    Float_t         bkgSig1fwhm;
@@ -74,6 +75,7 @@ public :
    TBranch        *b_cat;   //!
    TBranch        *b_muTruth;   //!
    TBranch        *b_sigma_mu;   //!
+   TBranch        *b_sigma_mu_constraint;   //!
    TBranch        *b_bkgTrue1fwhm;   //!
    TBranch        *b_bkgTrue2fwhm;   //!
    TBranch        *b_bkgSig1fwhm;   //!
@@ -163,6 +165,7 @@ void makeHistsSimpleBias::Init(TTree *tree)
    fChain->SetBranchAddress("cat", &cat, &b_cat);
    fChain->SetBranchAddress("muTruth", &muTruth, &b_muTruth);
    fChain->SetBranchAddress("sigma_mu", &sigma_mu, &b_sigma_mu);
+   fChain->SetBranchAddress("sigma_mu_constraint", &sigma_mu_constraint, &b_sigma_mu_constraint);
    fChain->SetBranchAddress("bkgTrue1fwhm", &bkgTrue1fwhm, &b_bkgTrue1fwhm);
    fChain->SetBranchAddress("bkgTrue2fwhm", &bkgTrue2fwhm, &b_bkgTrue2fwhm);
    fChain->SetBranchAddress("bkgSig1fwhm", &bkgSig1fwhm, &b_bkgSig1fwhm);

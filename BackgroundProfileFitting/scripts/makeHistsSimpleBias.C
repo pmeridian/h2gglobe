@@ -93,7 +93,7 @@ void makeHistsSimpleBias::Loop()
 //       if (TMath::Abs(mu-muTruth)>8)
 // 	continue;
 
-      TString evtType=Form("cat%d_truth_%s_test_%s_muInj_%2.1f_mass_%d",int(mycat),genFun,fitFun,muTruth,mass);
+      TString evtType=Form("cat%d_truth_%s_test_%s_muInj_%2.1f_muConstr_%3.2f_mass_%d",int(mycat),genFun,fitFun,muTruth,sigma_mu_constraint,mass);
       for (histo_map::const_iterator it=histos.begin();it!=histos.end();++it)
 	{
 	  TString key=evtType+Form("_%s",it->first.c_str());

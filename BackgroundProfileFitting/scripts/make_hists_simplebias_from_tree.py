@@ -17,7 +17,7 @@ r.gROOT.ProcessLine('.L scripts/makeHistsSimpleBias.C+g')
 
 from ROOT import makeHistsSimpleBias
 
-def makeHists(cat=(0,0),options=dict()):
+def makeHists(cat=(0,0,0),options=dict()):
     chain=r.TChain("muTree")
     input = open(options['input'])
     for line in input.readlines():
@@ -52,8 +52,8 @@ else:
     info = line.strip().split('=')
     if (info[0]=='cat'):
       myOptions={}
-      (cat,mu)=info[1].strip('(').strip(')').split(',')
-      configDict[(cat,mu)]=myOptions
+      (cat,mu,muConstr)=info[1].strip('(').strip(')').split(',')
+      configDict[(cat,mu,muConstr)]=myOptions
     else:
       myOptions[info[0]]=info[1]
 #  print configDict

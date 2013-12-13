@@ -19,6 +19,7 @@
 #include "TH1F.h"
 #include "TGraph.h"
 #include "TStopwatch.h"
+#include "TRandom3.h"
 #include "RooWorkspace.h"
 #include "RooDataSet.h"
 #include "RooDataHist.h"
@@ -112,6 +113,8 @@ int main(int argc, char* argv[]){
   int jobn;
   int seed;
   bool bkgOnly=false;
+  bool constraintMu=false;
+  float constrainMuWidth;
   float mu_low;
   float mu_high;
   float expectSignal;
@@ -121,6 +124,8 @@ int main(int argc, char* argv[]){
   bool throwHybridToys=false;
   vector<float> switchMass;
   vector<string> switchFunc;
+
+  TRandom3* generator=new TRandom3(0);
 
   po::options_description desc("Allowed options");
   desc.add_options()
@@ -134,6 +139,8 @@ int main(int argc, char* argv[]){
     ("outDir,D", po::value<string>(&outDir)->default_value("./"),                               "Name of out directory for plots")
     ("cat,c", po::value<int>(&cat),                                                             "Category")
     ("bkgOnly",                                                                                 "bkg Only")
+    ("constraintMu",                                                                            "consraint on mu")
+    ("constraintMuWidth",  po::value<float>(&constrainMuWidth)->default_value(0.7),             "consraint on mu width")
     ("ntoys,t", po::value<int>(&ntoys)->default_value(0),                                       "Number of toys to run")
     ("jobn,j", po::value<int>(&jobn)->default_value(0),                                         "Job number")
     ("seed,r", po::value<int>(&seed)->default_value(0),                                         "Set random seed")
@@ -151,6 +158,7 @@ int main(int argc, char* argv[]){
   if (vm.count("help")) { cout << desc << endl; exit(1); }
   if (vm.count("skipPlots")) skipPlots=true;
   if (vm.count("bkgOnly")) bkgOnly=true;
+  if (vm.count("constraintMu")) constraintMu=true;
   if (expectSignalMass!=110 && expectSignalMass!=115 && expectSignalMass!=120 && expectSignalMass!=125 && expectSignalMass!=130 && expectSignalMass!=135 && expectSignalMass!=140 && expectSignalMass!=145 && expectSignalMass!=150){
     cerr << "ERROR - expectSignalMass has to be integer in range (110,150,5)" << endl;
     exit(1);
@@ -196,6 +204,7 @@ int main(int argc, char* argv[]){
   Float_t mu_;
   Float_t sigma_mu_;
   Float_t pull_;
+  Float_t sigma_mu_constraint_;
   Float_t bkgSig1fwhm_;
   Float_t bkgSig2fwhm_;
   Float_t bkgTrue1fwhm_;
@@ -216,6 +225,7 @@ int main(int argc, char* argv[]){
   muTree->Branch("cat", &iCat_, "cat/i");
   muTree->Branch("muTruth", &expectSignal, "muTruth/F");
   muTree->Branch("sigma_mu", &sigma_mu_, "sigma_mu/F");
+  muTree->Branch("sigma_mu_constraint", &sigma_mu_constraint_, "sigma_mu_constraint/F");
   muTree->Branch("pull", &pull_, "pull/F");
   muTree->Branch("bkgTrue1fwhm", &bkgTrue1fwhm_, "bkgTrue1fwhm/F");
   muTree->Branch("bkgTrue2fwhm", &bkgTrue2fwhm_, "bkgTrue2fwhm/F");
@@ -348,7 +358,10 @@ int main(int argc, char* argv[]){
 
   iCat_=cat;
 
-
+  if (constraintMu)
+    sigma_mu_constraint_=constrainMuWidth;
+  else
+    sigma_mu_constraint_=-1;
 
   for (int toy=jobn*ntoys; toy<(jobn+1)*ntoys; toy++){
     cout << "---------------------------" << endl;
@@ -400,13 +413,14 @@ int main(int argc, char* argv[]){
 	  testModel.setSignalModifierConstant(true);
 	}
 
-      testModel.fitToData(it->second,false,true,!skipPlots,true,runMinos);
+      if (constraintMu) 
+	  testModel.setSignalModifierGaussianConstraint(generator->Gaus(expectSignal,constrainMuWidth),constrainMuWidth);
+
+      testModel.fitToData(it->second,false,true,!skipPlots,true,runMinos,constraintMu);
       if (!skipPlots)
 	testModel.plotPdfsToData(it->second,80,Form("%s/plots/toys/fit_%s",outDir.c_str(),it->first.c_str()),false,"",true,true);
 
       //      testModel.wsCache->Print("v");
-
-
 
 
       // -----  SAVE RESULTS IN THE TREE ----- 

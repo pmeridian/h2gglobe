@@ -15,6 +15,7 @@ parser.add_option("-M","--expectSignalMasses",default=[],action="append")
 parser.add_option("-L","--mulow",dest="mulow",type="float",help="Value of mu to start scan")
 parser.add_option("-H","--muhigh",dest="muhigh",type="float",help="Value of mu to end scan")
 parser.add_option("-S","--mustep",dest="mustep",type="float",help="Value of mu step size")
+parser.add_option("-C","--constraintMuWidth",dest="constrainMuWidth",type="float",help="sigma of mu constraint")
 parser.add_option("-t","--toysperjob",dest="toysperjob",type="int",help="Number of toys to run per job")
 parser.add_option("-n","--njobs",dest="njobs",type="int",help="Number of jobs to run")
 parser.add_option("-j","--jstart",dest="jstart",type="int",default=0,help="Start job number here")
@@ -34,16 +35,20 @@ if options.eosPath:
     options.eosPath = options.eosPath.split('/eos/cms')[1]
   os.system('cmsMkdir %s'%options.eosPath)
 
-def writeSubScript(cat,mlow,mhigh,outdir,muInject,massInject):
+def writeSubScript(cat,mlow,mhigh,outdir,muInject,massInject,constraintMu=0,constraintMuWidth=0):
   cat = int(cat)
   muInject=float(muInject)
   massInject=float(massInject)
+  constrainMu=int(constraintMu)
+  constrainMuWidth=float(constraintMuWidth)
 
   subline = './StandardBiasStudy -s %s -b %s --sigwsname %s --bkgwsname %s -d %s -c %d -L %3.1f -H %3.1f -t %d -D %s --expectSignal=%3.1f --expectSignalMass=%3d'%(os.path.basename(options.sigfilename) if options.copyWorkspace else options.sigfilename,os.path.basename(options.bkgfilename) if options.copyWorkspace else options.bkgfilename,options.sigwsname,options.bkgwsname,os.path.basename(options.datfile),cat,mlow,mhigh,options.toysperjob,os.path.abspath(outdir),muInject,massInject)
 
   if options.skipPlots: subline += ' --skipPlots'
   if options.bkgOnly: subline += ' --bkgOnly'
-
+  if (constrainMu>0 or constrainMuWidth>0):
+    subline+= ' --constraintMu --constraintMuWidth '+str(constrainMuWidth)
+    
   for j in range(options.jstart,options.njobs):
     f = open('%s/%s/sub_cat%d_job%d.sh'%(os.getcwd(),outdir,cat,j),'w')
     f.write('#!/bin/bash\n')
@@ -126,9 +131,14 @@ else:
       mhigh = float(lineConfig[3].split('=')[1])
 #      mstep = float(lineConfig[4].split('=')[1])
       injectmass = int(lineConfig[4].split('=')[1])
-      storage_dir = '%s/cat%d_mu%3.1f_mass%d'%(options.outerDir,cat,injectmu,injectmass)
+      if (len(lineConfig)>5):
+        constrainMu = int(lineConfig[5].split('=')[1])
+        constrainMuWidth = float(lineConfig[6].split('=')[1])
+        storage_dir = '%s/cat%d_mu%3.1f_constrainMu%3.2f_mass%d'%(options.outerDir,cat,injectmu,constrainMuWidth,injectmass)
+      else:
+        storage_dir = '%s/cat%d_mu%3.1f_mass%d'%(options.outerDir,cat,injectmu,injectmass)
       if options.eosPath:
         os.system('cmsMkdir %s/%s'%(options.eosPath,storage_dir))
       os.system('mkdir -p %s'%storage_dir)
-      writeSubScript(cat,mlow,mhigh,storage_dir,injectmu,injectmass)
+      writeSubScript(cat,mlow,mhigh,storage_dir,injectmu,injectmass,constrainMu,constrainMuWidth)
 

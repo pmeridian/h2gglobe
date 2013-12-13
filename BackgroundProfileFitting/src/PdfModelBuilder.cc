@@ -8,6 +8,7 @@
 #include "RooExponential.h"
 #include "RooPowerLaw.h"
 #include "RooPowerLawSum.h"
+#include "RooGaussian.h"
 #include "RooKeysPdf.h"
 #include "RooAddPdf.h"
 #include "RooDataHist.h"
@@ -41,7 +42,9 @@ PdfModelBuilder::PdfModelBuilder():
   keysPdfAttributesSet(false),
   verbosity(0)
 {
-  
+
+  sigConstraint = 0;
+
   recognisedPdfTypes.push_back("Bernstein");
   //  recognisedPdfTypes.push_back("Chebychev");
   recognisedPdfTypes.push_back("Exponential");
@@ -72,6 +75,12 @@ void PdfModelBuilder::setSignalModifierVal(float val){
 
 void PdfModelBuilder::setSignalModifierConstant(bool val){
   signalModifier->setConstant(val);
+}
+
+void PdfModelBuilder::setSignalModifierGaussianConstraint(float val, float sigma){
+  if (sigConstraint)
+    delete sigConstraint;
+  sigConstraint = new RooGaussian(Form("fConstraint_%s",signalModifier->GetName()),Form("fConstraint_%s",signalModifier->GetName()),*signalModifier,RooConst(val),RooConst(sigma));
 }
 
 RooAbsPdf* PdfModelBuilder::getChebychev(string prefix, int order){
@@ -521,7 +530,7 @@ void PdfModelBuilder::plotPdfsToData(RooAbsData *data, int binning, string name,
   delete canv;
 }
 
-void PdfModelBuilder::fitToData(RooAbsData *data, bool bkgOnly, bool cache, bool print, bool resetAfterFit, bool runMinosOnMu){
+void PdfModelBuilder::fitToData(RooAbsData *data, bool bkgOnly, bool cache, bool print, bool resetAfterFit, bool runMinosOnMu, bool constrainMu){
   
   map<string,RooAbsPdf*> pdfSet;
   if (bkgOnly) pdfSet = bkgPdfs;
@@ -534,10 +543,28 @@ void PdfModelBuilder::fitToData(RooAbsData *data, bool bkgOnly, bool cache, bool
     signalModifier->setConstant(constStatus);
 
     RooFitResult *fit;
+    RooLinkedList fitOptions;
+    RooCmdArg* h0=new RooCmdArg();
+    *h0=Save(true);
+    fitOptions.Add(h0);
+    
     if (runMinosOnMu && !constStatus)
-      fit = (RooFitResult*)it->second->fitTo(*data,Save(true),Hesse(false),Minos(*signalModifier));
-    else
-      fit = (RooFitResult*)it->second->fitTo(*data,Save(true));
+      {
+ 	RooCmdArg* h1=new RooCmdArg();
+	*h1=Hesse(false);
+ 	RooCmdArg* h2=new RooCmdArg();
+	*h2=Minos(*signalModifier);
+	fitOptions.Add(h1);
+	fitOptions.Add(h2);
+      }
+    if (constrainMu && sigConstraint != 0)
+      {
+ 	RooCmdArg* h3=new RooCmdArg();
+	*h3=ExternalConstraints(*sigConstraint);
+	fitOptions.Add(h3);
+      } 
+
+    fit = (RooFitResult*)it->second->fitTo(*data,fitOptions);
 
     if (print){
       cout << "Fit Res Before: " << endl;
@@ -547,10 +574,7 @@ void PdfModelBuilder::fitToData(RooAbsData *data, bool bkgOnly, bool cache, bool
     //Try a second fit
     if (fit->status()!=0) 
       {
-	if (runMinosOnMu && !constStatus)
-	  fit = (RooFitResult*)it->second->fitTo(*data,Save(true),Hesse(false),Minos(*signalModifier));
-	else
-	  fit = (RooFitResult*)it->second->fitTo(*data,Save(true));
+	fit = (RooFitResult*)it->second->fitTo(*data,fitOptions);
       }
 
     if (fit->status()!=0) 
@@ -709,7 +733,6 @@ void PdfModelBuilder::throwToy(string postfix, int nEvents, bool bkgOnly, bool b
     }
     toyData.insert(pair<string,RooAbsData*>(toy->GetName(),toy));
   }
-  
 }
 
 map<string,RooAbsData*> PdfModelBuilder::getToyData(){
