@@ -118,7 +118,7 @@ int main(int argc, char* argv[]){
   float mu_low;
   float mu_high;
   float expectSignal;
-  int expectSignalMass;
+  float expectSignalMass;
   bool skipPlots=false;
   int verbosity;
   bool throwHybridToys=false;
@@ -147,7 +147,7 @@ int main(int argc, char* argv[]){
     ("mulow,L", po::value<float>(&mu_low)->default_value(-3.),                                  "Value of mu to start scan")
     ("muhigh,H", po::value<float>(&mu_high)->default_value(3.),                                 "Value of mu to end scan")
     ("expectSignal", po::value<float>(&expectSignal)->default_value(0.),                        "Inject signal into toy")
-    ("expectSignalMass", po::value<int>(&expectSignalMass)->default_value(125),                 "Inject signal at this mass")
+    ("expectSignalMass", po::value<float>(&expectSignalMass)->default_value(125),                 "Inject signal at this mass")
     ("skipPlots",                                                                               "Skip full profile and toy plots")                        
     ("verbosity,v", po::value<int>(&verbosity)->default_value(0),                               "Verbosity level")
   ;    
@@ -159,10 +159,10 @@ int main(int argc, char* argv[]){
   if (vm.count("skipPlots")) skipPlots=true;
   if (vm.count("bkgOnly")) bkgOnly=true;
   if (vm.count("constraintMu")) constraintMu=true;
-  if (expectSignalMass!=110 && expectSignalMass!=115 && expectSignalMass!=120 && expectSignalMass!=125 && expectSignalMass!=130 && expectSignalMass!=135 && expectSignalMass!=140 && expectSignalMass!=145 && expectSignalMass!=150){
-    cerr << "ERROR - expectSignalMass has to be integer in range (110,150,5)" << endl;
-    exit(1);
-  }
+//   if (expectSignalMass!=110 && expectSignalMass!=115 && expectSignalMass!=120 && expectSignalMass!=125 && expectSignalMass!=130 && expectSignalMass!=135 && expectSignalMass!=140 && expectSignalMass!=145 && expectSignalMass!=150 && expectSignalMass!=125.6){
+//     cerr << "ERROR - expectSignalMass has to be integer in range (110,150,5)" << endl;
+//     exit(1);
+//   }
 
   vector<pair<int,pair<string,string> > > toysMap;
   vector<pair<int,pair<string,string> > > testMap;
@@ -220,7 +220,7 @@ int main(int argc, char* argv[]){
   char fitName_[30];
 
   TTree *muTree = new TTree("muTree","muTree");
-  muTree->Branch("mass", &expectSignalMass, "mass/I");
+  muTree->Branch("mass", &expectSignalMass, "mass/F");
   muTree->Branch("mu", &mu_, "mu/F");
   muTree->Branch("cat", &iCat_, "cat/i");
   muTree->Branch("muTruth", &expectSignal, "muTruth/F");
@@ -250,7 +250,8 @@ int main(int argc, char* argv[]){
   RooDataSet *data = (RooDataSet*)bkgWS->data(Form("data_mass_cat%d",cat));
   //RooDataSet *data = (RooDataSet*)bkgWS->data(Form("data_cat%d_7TeV",cat));
   RooDataHist *dataBinned = new RooDataHist(Form("roohist_data_mass_cat%d",cat),Form("roohist_data_mass_cat%d",cat),RooArgSet(*mass),*data);
-  RooDataSet *sigMC = (RooDataSet*)sigWS->data(Form("sig_TprimeM500_mass_m%d_cat%d",expectSignalMass,cat));
+  sigWS->Print();
+  RooDataHist *sigMC = (RooDataHist*)sigWS->data(Form("roohist_sig_TprimeM500_mass_m%4.1f_cat%d",expectSignalMass,cat));
 //   RooDataSet *sigMC_vbf = (RooDataSet*)sigWS->data(Form("sig_vbf_mass_m%d_cat%d",expectSignalMass,cat));
 //   RooDataSet *sigMC_wh = (RooDataSet*)sigWS->data(Form("sig_wh_mass_m%d_cat%d",expectSignalMass,cat));
 //   RooDataSet *sigMC_zh = (RooDataSet*)sigWS->data(Form("sig_zh_mass_m%d_cat%d",expectSignalMass,cat));
@@ -263,7 +264,7 @@ int main(int argc, char* argv[]){
   //   sigMC->append(*sigMC_zh);
   //   sigMC->append(*sigMC_tth);
   
-  TH1* sigMC_hist=sigMC->createHistogram(Form("sig_mass_m%d_cat%d",expectSignalMass,cat),*mass,Binning(320));
+  TH1* sigMC_hist=sigMC->createHistogram(Form("sig_mass_m%4.1f_cat%d",expectSignalMass,cat),*mass,Binning(160));
 
   //For range estimation
   int bin1=sigMC_hist->FindFirstBinAbove(sigMC_hist->GetMaximum()/2.);
@@ -380,7 +381,7 @@ int main(int argc, char* argv[]){
     //     }
     //     else {
 
-    bool poisson= (dataBinned->sumEntries()>30 || bkgOnly) ? true : false;
+    bool poisson= (dataBinned->sumEntries()>30) ? true : false;
     bool runMinos= (dataBinned->sumEntries()>100) ? false : true;
     bool binned= (dataBinned->sumEntries()>500) ? true : false;
 
@@ -475,9 +476,9 @@ int main(int argc, char* argv[]){
 
 	//Integrals for the fitted functions
 	RooAbsReal *intRange = itf->second->createIntegral(*mass,NormSet(*mass),Range("sigWindow"));
-	RooFormulaVar *normIntRange= new RooFormulaVar(Form("normIntRange_m%d_cat%d",expectSignalMass,cat),Form("normIntRange_m%d_cat%d",expectSignalMass,cat),"@0*@1",RooArgList(*intRange,*testModel.wsCache->var("bkg_yield")));
+	RooFormulaVar *normIntRange= new RooFormulaVar(Form("normIntRange_m%4.1f_cat%d",expectSignalMass,cat),Form("normIntRange_m%4.1f_cat%d",expectSignalMass,cat),"@0*@1",RooArgList(*intRange,*testModel.wsCache->var("bkg_yield")));
 	RooAbsReal *int2Range = itf->second->createIntegral(*mass,NormSet(*mass),Range("sigWindow2"));
-	RooFormulaVar *normInt2Range= new RooFormulaVar(Form("normInt2Range_m%d_cat%d",expectSignalMass,cat),Form("normInt2Range_m%d_cat%d",expectSignalMass,cat),"@0*@1",RooArgList(*int2Range,*testModel.wsCache->var("bkg_yield")));
+	RooFormulaVar *normInt2Range= new RooFormulaVar(Form("normInt2Range_m%4.1f_cat%d",expectSignalMass,cat),Form("normInt2Range_m%4.1f_cat%d",expectSignalMass,cat),"@0*@1",RooArgList(*int2Range,*testModel.wsCache->var("bkg_yield")));
 
 	bkgSig1fwhm_ = normIntRange->getVal();
 	bkgSig2fwhm_ = normInt2Range->getVal();

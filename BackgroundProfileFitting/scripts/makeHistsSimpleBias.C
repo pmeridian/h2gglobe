@@ -81,7 +81,8 @@ void makeHistsSimpleBias::Loop()
      if (ientry%10000==0)
        std::cout << jentry << std::endl;
      if (ientry < 0) break;
-      nb = fChain->GetEntry(jentry);   nbytes += nb;
+     sigma_mu_constraint=-1;
+     nb = fChain->GetEntry(jentry);   nbytes += nb;
       //Check quality of the fit
 //       if (sigma_mu<=0.1)
 // 	continue;
@@ -93,7 +94,7 @@ void makeHistsSimpleBias::Loop()
 //       if (TMath::Abs(mu-muTruth)>8)
 // 	continue;
 
-      TString evtType=Form("cat%d_truth_%s_test_%s_muInj_%2.1f_muConstr_%3.2f_mass_%d",int(mycat),genFun,fitFun,muTruth,sigma_mu_constraint,mass);
+      TString evtType=Form("cat%d_truth_%s_test_%s_muInj_%2.1f_muConstr_%3.2f_mass_%4.1f",int(mycat),genFun,fitFun,muTruth,sigma_mu_constraint,mass);
       for (histo_map::const_iterator it=histos.begin();it!=histos.end();++it)
 	{
 	  TString key=evtType+Form("_%s",it->first.c_str());

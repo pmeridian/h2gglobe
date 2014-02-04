@@ -11,6 +11,7 @@
 #include "RooAbsPdf.h"
 #include "RooAbsData.h"
 #include "RooDataSet.h"
+#include "RooDataHist.h"
 #include "RooProduct.h"
 #include "RooWorkspace.h"
 #include "TFile.h"
@@ -36,6 +37,7 @@ class PdfModelBuilder {
 
     void setSignalPdf(RooAbsPdf *pdf, RooRealVar *norm=NULL);
     void setSignalPdfFromMC(RooDataSet *data);
+    void setSignalPdfFromMC(RooDataHist *data);
     void makeSBPdfs(bool cache=true);
 
 

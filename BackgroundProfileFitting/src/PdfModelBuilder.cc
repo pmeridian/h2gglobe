@@ -425,9 +425,15 @@ void PdfModelBuilder::setSignalPdf(RooAbsPdf *pdf, RooRealVar *norm){
 }
 
 void PdfModelBuilder::setSignalPdfFromMC(RooDataSet *data){
-  
   RooDataHist *sigMCBinned = new RooDataHist(Form("roohist_%s",data->GetName()),Form("roohist_%s",data->GetName()),RooArgSet(*obs_var),*data);
   sigPdf = new RooHistPdf(Form("pdf_%s",data->GetName()),Form("pdf_%s",data->GetName()),RooArgSet(*obs_var),*sigMCBinned);
+  sigNorm = new RooConstVar(Form("sig_events_%s",data->GetName()),Form("sig_events_%s",data->GetName()),data->sumEntries());
+  signal_set=true;
+}
+
+void PdfModelBuilder::setSignalPdfFromMC(RooDataHist *data){
+//   RooDataHist *sigMCBinned = new RooDataHist(Form("roohist_%s",data->GetName()),Form("roohist_%s",data->GetName()),RooArgSet(*obs_var),*data);
+  sigPdf = new RooHistPdf(Form("pdf_%s",data->GetName()),Form("pdf_%s",data->GetName()),RooArgSet(*obs_var),*data);
   sigNorm = new RooConstVar(Form("sig_events_%s",data->GetName()),Form("sig_events_%s",data->GetName()),data->sumEntries());
   signal_set=true;
 }

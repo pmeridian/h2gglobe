@@ -48,7 +48,7 @@ public :
    TH1F* NewHist(TString name, string plotType);
 
    // Declaration of leaf types
-   Int_t           mass;
+   Float_t           mass;
    Float_t         mu;
    Float_t         pull;
    UInt_t          cat;

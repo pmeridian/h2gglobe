@@ -21,7 +21,7 @@ r.gStyle.SetOptTitle(0)
 ranges={}
 ranges["mu"]=(-5,5)
 ranges["pullMu"]=(-0.1,0.1)
-ranges["pullBkg"]=(-0.1,0.1)
+ranges["pullBkg"]=(-2,2)
 ranges["errMu"]=(0,4)
 ranges["errBkg"]=(0,1)
 
@@ -121,6 +121,7 @@ def drawHists():
 
   # ---- Assemble the final plots
   c=r.TCanvas("c","c",800,600)
+
   for cat in cats:
     for truth in truth_mods:
       for mu in muInj:
@@ -169,23 +170,25 @@ def drawHists():
               line2.SetLineWidth(1)
               line2.Draw()
 
+            out=r.TFile("%s/cat%d_truth_%s_muInj_%s_muConstr_%s_%s_mean.root"%(options.outdir,int(cat.lstrip('cat')),truth,str(mu),str(muC),plt),"RECREATE")
             for test in test_mods:
-              graphs[(cat,truth,test,plt)]['median'].SetMarkerStyle(20)
-              graphs[(cat,truth,test,plt)]['median'].SetMarkerSize(0.9)
-              graphs[(cat,truth,test,plt)]['median'].SetMarkerColor(colorMap[test])
-              graphs[(cat,truth,test,plt)]['median'].SetLineColor(colorMap[test])
-              graphs[(cat,truth,test,plt)]['median'].SetLineWidth(2)
-              graphs[(cat,truth,test,plt)]['median'].Draw("SAMEPL")
-              maxAbsV=getMaximumBias(graphs[(cat,truth,test,plt)]['median'])
+              graphs[(cat,truth,test,plt)]['mean'].SetMarkerStyle(20)
+              graphs[(cat,truth,test,plt)]['mean'].SetMarkerSize(0.9)
+              graphs[(cat,truth,test,plt)]['mean'].SetMarkerColor(colorMap[test])
+              graphs[(cat,truth,test,plt)]['mean'].SetLineColor(colorMap[test])
+              graphs[(cat,truth,test,plt)]['mean'].SetLineWidth(2)
+              graphs[(cat,truth,test,plt)]['mean'].Draw("SAMEPL")
+              graphs[(cat,truth,test,plt)]['mean'].Write()
+              maxAbsV=getMaximumBias(graphs[(cat,truth,test,plt)]['mean'])
               if (plt.find("pull")>-1):
-                leg.AddEntry(graphs[(cat,truth,test,plt)]['median'],str(test)+": maxBias(%3.2f)"%(maxAbsV),'pl')
+                leg.AddEntry(graphs[(cat,truth,test,plt)]['mean'],str(test)+": maxBias(%3.2f)"%(maxAbsV),'pl')
               else:
-                leg.AddEntry(graphs[(cat,truth,test,plt)]['median'],str(test),'pl')
+                leg.AddEntry(graphs[(cat,truth,test,plt)]['mean'],str(test),'pl')
             leg.Draw()
             axis.Draw('AXISSAME')
             for format in [".png",".pdf"]:
-              c.SaveAs("%s/cat%d_truth_%s_muInj_%s_muConstr_%s_%s_median%s"%(options.outdir,int(cat.lstrip('cat')),truth,str(mu),str(muC),plt,format))
-          
+              c.SaveAs("%s/cat%d_truth_%s_muInj_%s_muConstr_%s_%s_mean%s"%(options.outdir,int(cat.lstrip('cat')),truth,str(mu),str(muC),plt,format))
+            out.Close()
 
 def drawGraph(cat=0,truth="exp1",test="exp1",mu="0.0",muC="0.0",plot="pull",masses=[110,120,130,140,150]):
   file = r.TFile.Open(options.infile)
@@ -203,16 +206,16 @@ def drawGraph(cat=0,truth="exp1",test="exp1",mu="0.0",muC="0.0",plot="pull",mass
   graphDict['band68']=r.TGraphAsymmErrors()
   graphDict['band95']=r.TGraphAsymmErrors()
 
-  graphDict['median'].SetName("cat%d_truth_%s_test_%s_muInj_%s_muConstr_%s_median"%(int(cat.lstrip('cat')),truth,str(mu),str(muC),test))
-  graphDict['mean'].SetName("cat%d_truth_%s_test_%s_muInj_%s_muConstr_%s_mean"%(int(cat.lstrip('cat')),truth,str(mu),str(muC),test))
-  graphDict['rmsband'].SetName("cat%d_truth_%s_test_%s_muInj_%s_muConstr_%s_rmsband"%(int(cat.lstrip('cat')),truth,str(mu),str(muC),test))
-  graphDict['band68'].SetName("cat%d_truth_%s_test_%s_muInj_%s_muConstr_%s_band68"%(int(cat.lstrip('cat')),truth,str(mu),str(muC),test))
-  graphDict['band95'].SetName("cat%d_truth_%s_test_%s_muInj_%s_muConstr_%s_band95"%(int(cat.lstrip('cat')),truth,str(mu),str(muC),test))
+  graphDict['median'].SetName("cat%d_truth_%s_test_%s_muInj_%s_muConstr_%s_%s_median"%(int(cat.lstrip('cat')),truth,test,str(mu),str(muC),plot))
+  graphDict['mean'].SetName("cat%d_truth_%s_test_%s_muInj_%s_muConstr_%s_%s_mean"%(int(cat.lstrip('cat')),truth,test,str(mu),str(muC),plot))
+  graphDict['rmsband'].SetName("cat%d_truth_%s_test_%s_muInj_%s_muConstr_%s_%s_rmsband"%(int(cat.lstrip('cat')),truth,test,str(mu),str(muC),plot))
+  graphDict['band68'].SetName("cat%d_truth_%s_test_%s_muInj_%s_muConstr_%s_%s_band68"%(int(cat.lstrip('cat')),truth,test,str(mu),str(muC),plot))
+  graphDict['band95'].SetName("cat%d_truth_%s_test_%s_muInj_%s_muConstr_%s_%s_band95"%(int(cat.lstrip('cat')),truth,test,str(mu),str(muC),plot))
 
   i=0
   print "+++++++ PLOT_TYPE "+str(plot)
   for mass in masses:
-    h=file.Get("cat%d_truth_%s_test_%s_muInj_%s_muConstr_%s_mass_%d_%s"%(int(cat.lstrip('cat')),truth,test,str(mu),str(muC),int(mass),plotType))
+    h=file.Get("cat%d_truth_%s_test_%s_muInj_%s_muConstr_%s_mass_%4.1f_%s"%(int(cat.lstrip('cat')),truth,test,str(mu),str(muC),float(mass),plotType))
     print str(h.GetName())+"\t"+str(h.GetMean())+"\t"+str(h.GetRMS())
     h.GetXaxis().SetRangeUser(ranges[plot][0],ranges[plot][1])
     quantiles=array('d',[0,0,0,0,0])
